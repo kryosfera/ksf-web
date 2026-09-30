@@ -1,0 +1,9 @@
+{
+  "periodo": "jun 2025 – may 2026",
+  "items": [
+    { "valor": 183, "prefijo": "", "etiqueta": "proyectos ejecutados en 12 meses" },
+    { "valor": 25, "prefijo": "+", "etiqueta": "laboratorios y compañías de salud clientes" },
+    { "valor": 2266, "prefijo": "", "etiqueta": "piezas audiovisuales en la videoteca" },
+    { "valor": 104, "prefijo": "", "etiqueta": "congresos, simposios y eventos cubiertos" }
+  ]
+}

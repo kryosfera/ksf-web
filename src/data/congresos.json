@@ -1,0 +1,23 @@
+{
+  "realizados": [
+    { "ciudad": "Madrid", "evento": "Sanofi 2025" },
+    { "ciudad": "Barcelona", "evento": "ERS 2026 · CAIRE" },
+    { "ciudad": "Berlín", "evento": "UEG Week 2025 · Adacyte" },
+    { "ciudad": "Estocolmo", "evento": "ECCO 2026 · Adacyte" },
+    { "ciudad": "Atenas", "evento": "ILAE 2026 · Angelini" }
+  ],
+  "proximos": [
+    { "congreso": "ECCO", "ciudad": "Copenhague", "mes": "mar" },
+    { "congreso": "EULAR", "ciudad": "Berlín", "mes": "jun" },
+    { "congreso": "EHA", "ciudad": "Barcelona", "mes": "jun" },
+    { "congreso": "EAN", "ciudad": "Gotemburgo", "mes": "jun" },
+    { "congreso": "ESC", "ciudad": "Milán", "mes": "ago" },
+    { "congreso": "ERS", "ciudad": "Milán", "mes": "sep" },
+    { "congreso": "ESMO", "ciudad": "Barcelona", "mes": "sep" },
+    { "congreso": "EASD", "ciudad": "Budapest", "mes": "sep" },
+    { "congreso": "ECNP", "ciudad": "Barcelona", "mes": "sep" },
+    { "congreso": "ECTRIMS", "ciudad": "Viena", "mes": "oct" },
+    { "congreso": "ESCRS", "ciudad": "Madrid", "mes": "oct" },
+    { "congreso": "UEG Week", "ciudad": "Viena", "mes": "oct" }
+  ]
+}

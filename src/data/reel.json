@@ -1,0 +1,15 @@
+{
+  "total": 46.8,
+  "video": { "mp4": null, "webm": null },
+  "shots": [
+    { "start": 0, "imagen": "plato.jpeg", "alt": "Plató de KSF durante una mesa de debate retransmitida", "kicker": "03 · Streaming y webinars", "titulo": "Desde plató", "texto": "Con impacto de producción televisiva, combinando la flexibilidad de la realidad virtual con el rigor del entorno sanitario.", "servicio": 3 },
+    { "start": 5.2, "imagen": "rodaje.webp", "alt": "Rodaje de KSF en localización, con cámara e iluminación", "kicker": "02 · Producción audiovisual", "titulo": "Rodaje en localización", "texto": "Reel corporativo, highlights, series multicapítulo: 2.266 piezas en nuestra videoteca.", "servicio": 2 },
+    { "start": 10.4, "imagen": "congreso-camara.jpeg", "alt": "Cámara de KSF grabando en la sala de un congreso", "kicker": "05 · Congresos", "titulo": "Cobertura de congreso", "texto": "Coordinamos grandes citas médicas donde el conocimiento convive con una experiencia memorable.", "servicio": 5 },
+    { "start": 15.6, "imagen": "realizacion.jpeg", "alt": "Realización en directo desde la mesa de mezclas", "kicker": "03 · Streaming y webinars", "titulo": "Realización en directo", "texto": "Emisiones desde tu sede o cualquier punto del mundo, con traducción simultánea multicanal.", "servicio": 3 },
+    { "start": 20.8, "imagen": "stand-palex.jpeg", "alt": "Montaje del stand de Palex en un congreso", "kicker": "05 · Congresos", "titulo": "Stands y montajes", "texto": "Del diseño a la supervisión en sede: montamos, producimos y cubrimos audiovisualmente los stands.", "servicio": 5 },
+    { "start": 26, "imagen": "vision-pro.webp", "alt": "Experiencia con gafas Apple Vision Pro junto a un corazón anatómico", "kicker": "05 · Congresos", "titulo": "Realidad virtual y experiencia inmersiva", "texto": "Apple Vision Pro y storytelling científico: la evidencia convertida en experiencia sensorial.", "servicio": 5 },
+    { "start": 31.2, "imagen": "equipo-sede.webp", "alt": "Equipo técnico de KSF en una reunión científica", "kicker": "04 · Eventos", "titulo": "Reuniones científicas", "texto": "Encuentros de alto rigor para el intercambio de evidencia clínica y la actualización médica.", "servicio": 4 },
+    { "start": 36.4, "imagen": "entrevista.jpeg", "alt": "Grabación de una vídeo-entrevista con el equipo de KSF", "kicker": "02 · Producción audiovisual", "titulo": "Vídeo-entrevista", "texto": "Casos clínicos, podcasts y entrevistas con edición científica y anonimización de datos.", "servicio": 2 },
+    { "start": 41.6, "imagen": "ponente.webp", "alt": "Cámara grabando a un ponente para una formación mixta", "kicker": "01 · Formación", "titulo": "Formación mixta", "texto": "Ponentes y asistentes conectados en remoto y en sala, en tiempo real, con créditos oficiales.", "servicio": 1 }
+  ]
+}

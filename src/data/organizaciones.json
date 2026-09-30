@@ -1,0 +1,32 @@
+[
+  {
+    "id": "fundacion-andaluza-de-nefrologia-glosan",
+    "nombre": "Fundación Andaluza de Nefrologia (GLOSAN)",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "geteccu",
+    "nombre": "GETECCU",
+    "web": "https://geteccu.org/",
+    "logo": null
+  },
+  {
+    "id": "hospital-sant-joan-de-deu",
+    "nombre": "Hospital Sant Joan de Déu",
+    "web": "https://www.sjdhospitalbarcelona.org/es",
+    "logo": null
+  },
+  {
+    "id": "seghnp",
+    "nombre": "SEGHNP",
+    "web": "https://www.seghnp.org/",
+    "logo": null
+  },
+  {
+    "id": "seor",
+    "nombre": "SEOR",
+    "web": "https://seor.es/",
+    "logo": null
+  }
+]

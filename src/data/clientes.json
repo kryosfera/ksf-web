@@ -1,0 +1,272 @@
+[
+  {
+    "id": "abbott",
+    "nombre": "Abbott",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "abbvie",
+    "nombre": "Abbvie",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "aboca",
+    "nombre": "ABOCA",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "adacyte",
+    "nombre": "Adacyte",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "alfasigma",
+    "nombre": "Alfasigma",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "allergy-therapeutics",
+    "nombre": "Allergy Therapeutics",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "angelini-pharma",
+    "nombre": "Angelini Pharma",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "b-braun",
+    "nombre": "B Braun",
+    "web": "https://www.bbraun.es/es.html",
+    "logo": null
+  },
+  {
+    "id": "brill-pharma",
+    "nombre": "Brill Pharma",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "bristol-myers-squibb",
+    "nombre": "Bristol Myers Squibb",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "caire",
+    "nombre": "Caire",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "drfalk",
+    "nombre": "DrFalk",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "esteve",
+    "nombre": "Esteve",
+    "web": "https://www.esteve.com/",
+    "logo": null
+  },
+  {
+    "id": "faes-farma",
+    "nombre": "Faes Farma",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "ferrer",
+    "nombre": "Ferrer",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "ferring",
+    "nombre": "Ferring",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "fresenius-kabi",
+    "nombre": "Fresenius Kabi",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "galapagos",
+    "nombre": "Galápagos",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "ivascular",
+    "nombre": "iVascular",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "janssen",
+    "nombre": "Janssen",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "kern",
+    "nombre": "Kern",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "kyowa-kirin",
+    "nombre": "Kyowa Kirin",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "laboratorios-vinas",
+    "nombre": "Laboratorios Viñas",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "lacer",
+    "nombre": "Lacer",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "lactalis",
+    "nombre": "Lactalis",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "lundbeck",
+    "nombre": "Lundbeck",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "medicina-y-mercado",
+    "nombre": "Medicina y Mercado",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "msd",
+    "nombre": "MSD",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "nestle-healthscience",
+    "nombre": "Nestle HealthScience",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "norgine",
+    "nombre": "Norgine",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "nucleix",
+    "nombre": "Nucleix",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "ordesa",
+    "nombre": "Ordesa",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "otsuka",
+    "nombre": "Otsuka",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "palex",
+    "nombre": "Palex",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "pfizer",
+    "nombre": "Pfizer",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "recordati",
+    "nombre": "RECORDATI",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "sandoz",
+    "nombre": "Sandoz",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "sanofi",
+    "nombre": "Sanofi",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "shionogi",
+    "nombre": "SHIONOGI",
+    "web": "https://www.shionogi.com/eu-es/es/",
+    "logo": null
+  },
+  {
+    "id": "takeda",
+    "nombre": "Takeda",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "thea",
+    "nombre": "THEA",
+    "web": "https://www.laboratoriosthea.com/",
+    "logo": null
+  },
+  {
+    "id": "tillotts",
+    "nombre": "Tillotts",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "topcon",
+    "nombre": "Topcon",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "viajes-el-corte-ingles",
+    "nombre": "Viajes El Corte Inglés",
+    "web": null,
+    "logo": null
+  },
+  {
+    "id": "viajes-pacifico",
+    "nombre": "Viajes Pacífico",
+    "web": null,
+    "logo": null
+  }
+]

@@ -1,0 +1,12 @@
+[
+  { "nombre": "Marta", "rol": "Ventas", "foto": "marta.png" },
+  { "nombre": "Vanesa", "rol": "Financiero", "foto": null },
+  { "nombre": "Quim", "rol": "Tecnología", "foto": "quim.png" },
+  { "nombre": "Josep", "rol": "Marketing", "foto": "josep.png" },
+  { "nombre": "Mauro", "rol": "Fotógrafo", "foto": "mauro.png" },
+  { "nombre": "Angela", "rol": "Diseñadora gráfica", "foto": null },
+  { "nombre": "Guillermo", "rol": "Producción audiovisual", "foto": null },
+  { "nombre": "Laura", "rol": "Diseñadora", "foto": null },
+  { "nombre": "Nor", "rol": "Técnico de sonido", "foto": "nor.png" },
+  { "nombre": "Paula", "rol": "Técnico de sonido", "foto": "paula.png" }
+]
