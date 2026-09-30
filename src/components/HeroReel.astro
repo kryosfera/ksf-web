@@ -1,0 +1,153 @@
+---
+import { getImage } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import reel from '../data/reel.json';
+import cifras from '../data/cifras.json';
+import StatCounters from './StatCounters.astro';
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/reel/*', { eager: true });
+const byName = (n: string) => files[`../assets/reel/${n}`].default;
+const shots = await Promise.all(reel.shots.map(async (s, i) => ({
+  ...s,
+  img: await getImage({ src: byName(s.imagen), widths: [960, 1600, 2400], sizes: '100vw', format: 'avif', quality: 60, loading: i === 0 ? 'eager' : 'lazy' }),
+})));
+const servicios = (await getCollection('servicios')).sort((a, b) => a.data.numero - b.data.numero);
+const shotServices = new Set(reel.shots.map((s) => s.servicio));
+const first = reel.shots[0];
+---
+<section class="hero" data-hero-reel aria-label="Presentación de KSF">
+  <script type="application/json" data-reel set:html={JSON.stringify({ total: reel.total, shots: reel.shots })} />
+  <div class="screen">
+    <div class="reel">
+      {shots.map((s, i) => (
+        <figure class:list={['clip', { 'is-on': i === 0 }]} data-shot>
+          <img src={s.img.src} srcset={s.img.srcSet.attribute} sizes="100vw" alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} decoding="async" />
+        </figure>
+      ))}
+      {reel.video.mp4 ? (
+        <video data-reel-video muted playsinline autoplay loop preload="metadata" aria-hidden="true">
+          {reel.video.webm && <source src={reel.video.webm} type="video/webm" />}
+          <source src={reel.video.mp4} type="video/mp4" />
+        </video>
+      ) : <div data-video-slot></div>}
+    </div>
+    <div class="shade" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="intro">
+      <span class="eyebrow-h"><i></i>KSF Digital Healthcare · Barcelona</span>
+      <h1 class="claim"><span class="line"><span>Convertimos la ciencia</span></span><span class="line"><span>en <span class="grad-text">experiencias</span></span></span></h1>
+      <p class="sub">Formación, eventos y tecnología para el sector salud.</p>
+      <div class="cta"><a class="btn btn-primary" href="/contacto" data-magnetic>Pide una propuesta</a><a class="btn btn-secondary glass" href="/servicios">Ver servicios</a></div>
+    </div>
+
+    <div class="l3" aria-live="polite">
+      <div class="l3-bar" data-l3-bar></div>
+      <span class="mask"><span class="l3-k" data-l3-k>{first.kicker}</span></span>
+      <span class="mask"><span class="l3-t" data-l3-t>{first.titulo}</span></span>
+      <span class="mask"><span class="l3-d" data-l3-d>{first.texto}</span></span>
+    </div>
+
+    <div class="prog">
+      <div class="segs" role="group" aria-label="Planos del reel">
+        {reel.shots.map((s, i) => <button type="button" class="seg" data-seg aria-label={`Plano ${i + 1}: ${s.titulo}`}><i></i></button>)}
+      </div>
+      <span class="tc" data-tc aria-hidden="true">01 / {String(reel.shots.length).padStart(2, '0')}</span>
+      <button class="pp" type="button" data-pause aria-pressed="false">❚❚ Pausa</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <span class="eyebrow">Servicios</span>
+    <h2>Un solo equipo. Nueve líneas de servicio.</h2>
+    <ol class="svc">
+      {servicios.map((s) => (
+        <li data-svc={s.data.numero}>
+          {shotServices.has(s.data.numero)
+            ? <button type="button"><em>{String(s.data.numero).padStart(2, '0')}</em><b>{s.data.titulo}</b></button>
+            : <a href={`/servicios/${s.id}`}><em>{String(s.data.numero).padStart(2, '0')}</em><b>{s.data.titulo}</b>{s.data.nuevo && <span class="tagnew">NUEVO 2026</span>}</a>}
+        </li>
+      ))}
+    </ol>
+  </div>
+  <StatCounters items={cifras.items} inHero />
+</section>
+
+<style>
+  .hero { --ink: #EEF5F6; --muted-h: #A3B5BD; --line-h: rgba(238,245,246,.16);
+    position: relative; background: #05090E; color: var(--ink); font-family: var(--f-body); }
+  .screen { position: relative; height: max(580px, 92svh); overflow: hidden; isolation: isolate; }
+  .reel { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: #0A1118; }
+  .clip { position: absolute; inset: 0; opacity: 0; visibility: hidden; margin: 0; }
+  .clip.is-on { opacity: 1; visibility: visible; }
+  .clip img { width: 100%; height: 100%; max-width: none; object-fit: cover; display: block; will-change: transform; transform-origin: 50% 50%; }
+  video[data-reel-video] { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+  .shade { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(5,9,14,.62) 0%, rgba(5,9,14,0) 22%, rgba(5,9,14,0) 42%, rgba(5,9,14,.88) 100%),
+                radial-gradient(70% 70% at 0% 100%, rgba(5,9,14,.75), transparent 70%); }
+  .grain { position: absolute; inset: -50%; z-index: 2; pointer-events: none; opacity: .07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1s steps(6) infinite; }
+  @keyframes grain { 0% { transform: translate(0,0); } 20% { transform: translate(-3%,2%); } 40% { transform: translate(2%,-3%); } 60% { transform: translate(-2%,-1%); } 80% { transform: translate(3%,3%); } 100% { transform: translate(0,0); } }
+
+  .intro { position: absolute; z-index: 4; left: 5%; bottom: 17%; max-width: min(52%, 760px); }
+  .eyebrow-h { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted-h); }
+  .eyebrow-h i { width: 8px; height: 8px; border-radius: 50%; background: #FF4F45; box-shadow: 0 0 10px #FF4F45; }
+  .claim { font: 900 clamp(42px, min(6.4vw, 10.5vh), 108px)/.96 var(--f-display); letter-spacing: -.03em; margin: 16px 0 18px; }
+  .line { display: block; overflow: clip; padding-bottom: .1em; margin-bottom: -.1em; }
+  .line > span { display: inline-block; will-change: transform; }
+  .sub { font: 500 clamp(16px, 1.35vw, 19px)/1.5 var(--f-body); color: #D2DEE2; max-width: 42ch; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  .cta .btn { will-change: transform; }
+  .glass { backdrop-filter: blur(6px); background: rgba(5,9,14,.25); color: #EEF5F6; border-color: rgba(238,245,246,.3); }
+
+  .l3 { position: absolute; z-index: 4; right: 7%; bottom: 12%; width: min(34%, 430px); display: grid; gap: 8px; will-change: transform; }
+  .l3-bar { height: 3px; width: 56px; border-radius: 2px; background: var(--grad); transform-origin: 0 50%; }
+  .mask { display: block; overflow: clip; }
+  .mask > span { display: block; will-change: transform; }
+  .l3-k { font: 500 11.5px/1.3 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--aqua); }
+  .l3-t { font: 900 clamp(22px, 2.1vw, 30px)/1.1 var(--f-display); letter-spacing: -.01em; }
+  .l3-d { font: 500 14px/1.45 var(--f-body); color: #C9D6DA; }
+
+  .prog { position: absolute; z-index: 4; left: 5%; right: 5%; bottom: 4.5%; display: flex; align-items: center; gap: 14px; }
+  .segs { flex: 1; display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px; }
+  .seg { position: relative; height: 18px; border: 0; background: none; padding: 0; cursor: pointer; }
+  .seg::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 2px; border-radius: 2px; background: rgba(238,245,246,.22); }
+  .seg i { position: absolute; left: 0; right: 0; top: 8px; height: 2px; border-radius: 2px; background: var(--grad); transform: scaleX(0); transform-origin: 0 50%; }
+  .seg.done i { transform: scaleX(1); }
+  .tc { font: 500 11px/1 var(--f-mono); letter-spacing: .08em; color: var(--muted-h); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pp { border: 1px solid var(--line-h); background: rgba(5,9,14,.35); color: var(--ink); border-radius: 999px; padding: 8px 13px; font: 600 12.5px/1 var(--f-body); white-space: nowrap; cursor: pointer; }
+  .pp[hidden] { display: none; }
+
+  /* servicios y cifras: bloques normales en móvil o sin movimiento; superpuestos en escritorio */
+  .panel { padding: 44px 5% 12px; display: grid; gap: 18px; }
+  .panel h2 { font: 900 clamp(28px, 2.8vw, 42px)/1.05 var(--f-display); letter-spacing: -.02em; max-width: 14ch; }
+  .svc { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line-h); }
+  .svc li { border-bottom: 1px solid var(--line-h); }
+  .svc button, .svc a { all: unset; box-sizing: border-box; display: flex; align-items: baseline; gap: 14px; width: 100%; padding: 9px 0; font: 600 clamp(15px, 1.25vw, 18px)/1.25 var(--f-body); color: var(--muted-h); transition: color .3s; }
+  .svc button, .svc a { cursor: pointer; }
+  .svc button:hover, .svc button:focus-visible, .svc a:hover, .svc a:focus-visible { color: var(--ink); }
+  .svc :is(button, a):focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
+  .svc em { font: 500 11px/1 var(--f-mono); font-style: normal; color: var(--muted-h); min-width: 22px; }
+  .svc b { font-weight: 600; }
+  .svc .tagnew { margin-left: auto; font: 600 10px/1 var(--f-mono); letter-spacing: .06em; color: #06121A; background: var(--mint); padding: 4px 6px; border-radius: 5px; }
+  .svc li.is-on :is(button, a) { color: var(--ink); }
+  .svc li.is-on em { color: var(--mint); }
+  .svc li.is-on b { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  .hero.is-pinned { height: max(660px, 100svh); overflow: hidden; }
+  .hero.is-pinned .screen { position: absolute; inset: 0; height: auto; }
+  .hero.is-pinned .panel { position: absolute; z-index: 6; left: 5%; top: 14%; width: 37%; padding: 0; }
+  .hero :global(.figs) { padding: 26px var(--gutter) 48px; }
+  .hero.is-pinned :global(.figs) { position: absolute; z-index: 6; left: 5%; right: 5%; bottom: 3.5%; padding: 0; }
+
+  @media (max-width: 760px) {
+    .intro { left: 16px; right: 16px; max-width: none; bottom: 20%; }
+    .l3 { display: none; }
+    .prog { left: 16px; right: 16px; }
+    .panel { padding-inline: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .grain { animation: none; } }
+</style>
+
+<script>import '../scripts/hero-reel';</script>

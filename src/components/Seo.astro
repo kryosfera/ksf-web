@@ -1,0 +1,21 @@
+---
+interface Props { title: string; description: string; jsonLd?: object }
+const { title, description, jsonLd } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const org = { '@context': 'https://schema.org', '@type': 'Organization', name: 'KSF Digital Healthcare',
+  legalName: 'Kryosfera Solutions, S.L.', url: 'https://ksf.es', email: 'info@ksf.es', logo: 'https://ksf.es/og.png',
+  address: { '@type': 'PostalAddress', streetAddress: 'Nicaragua 106', postalCode: '08029', addressLocality: 'Barcelona', addressCountry: 'ES' } };
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:site_name" content="KSF Digital Healthcare" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={new URL('/og.png', Astro.site)} />
+<meta name="twitter:card" content="summary_large_image" />
+<script type="application/ld+json" set:html={JSON.stringify(org)} />
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}

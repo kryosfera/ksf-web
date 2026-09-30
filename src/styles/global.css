@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@import "@fontsource-variable/red-hat-display";
+@import "@fontsource-variable/manrope";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+:root {
+  --mint: #89F4B4; --aqua: #7BD9EF;
+  --grad: linear-gradient(90deg, var(--mint), var(--aqua));
+  --f-display: "Red Hat Display Variable", system-ui, sans-serif;
+  --f-body: "Manrope Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --gutter: clamp(16px, 5vw, 72px);
+}
+[data-mode="oscuro"] {
+  --bg: #05090E; --fg: #EEF5F6; --muted: #A3B5BD; --line: rgba(238,245,246,.14); --card: #0B141C;
+  --accent-text: #7BD9EF; --btn-bg: #EEF5F6; --btn-fg: #06121A; color-scheme: dark;
+}
+[data-mode="claro"] {
+  --bg: #F3F6F8; --fg: #12162E; --muted: #59607F; --line: #D8DEE8; --card: #FFFFFF;
+  --accent-text: #0E6B75; --btn-bg: #12162E; --btn-fg: #F3F6F8; color-scheme: light;
+}
+@theme inline {
+  --color-bg: var(--bg); --color-fg: var(--fg); --color-muted: var(--muted); --color-line: var(--line);
+  --color-card: var(--card); --color-accent: var(--accent-text); --color-mint: #89F4B4; --color-aqua: #7BD9EF;
+  --font-display: var(--f-display); --font-body: var(--f-body); --font-mono: var(--f-mono);
+}
+
+html { background: var(--bg); color: var(--fg); font-family: var(--f-body); -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-size: 17px; line-height: 1.6; }
+[data-mode] { background: var(--bg); color: var(--fg); }
+h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+p { margin: 0; }
+img { max-width: 100%; height: auto; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--aqua); outline-offset: 3px; }
+
+.wrap { max-width: 1280px; margin-inline: auto; padding-inline: var(--gutter); }
+.eyebrow { font: 500 12px/1.2 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
+.grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.btn { display: inline-flex; align-items: center; gap: .5em; text-decoration: none; font: 700 15px/1 var(--f-body); padding: 16px 24px; border-radius: 999px; border: 1.5px solid transparent; }
+.btn-primary { background: var(--btn-bg); color: var(--btn-fg); }
+.btn-grad { background: var(--grad); color: #06121A; }
+.btn-secondary { border-color: var(--line); color: var(--fg); }
+.btn-secondary:hover { border-color: var(--fg); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

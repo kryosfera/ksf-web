@@ -1,0 +1,33 @@
+---
+import KLogo from './KLogo.astro';
+import { getCollection } from 'astro:content';
+const servicios = (await getCollection('servicios')).sort((a, b) => a.data.numero - b.data.numero);
+const year = new Date().getFullYear();
+---
+<footer data-mode="oscuro" class="site-footer">
+  <div class="wrap grid">
+    <div class="brandcol">
+      <KLogo size={40} id="ftr" />
+      <p class="claim">Convertimos la ciencia en <span class="grad-text">experiencias</span></p>
+      <p class="addr">KSF Digital Healthcare · Nicaragua 106, 08029 Barcelona</p>
+      <p class="addr"><a href="mailto:info@ksf.es">info@ksf.es</a></p>
+    </div>
+    <nav aria-label="Servicios"><p class="eyebrow">Servicios</p>
+      <ul>{servicios.map((s) => <li><a href={`/servicios/${s.id}`}>{s.data.titulo}</a></li>)}</ul></nav>
+    <nav aria-label="KSF"><p class="eyebrow">KSF</p>
+      <ul><li><a href="/plataformas">Plataformas</a></li><li><a href="/nosotros">Nosotros</a></li><li><a href="/contacto">Contacto</a></li></ul></nav>
+    <nav aria-label="Legal"><p class="eyebrow">Legal</p>
+      <ul><li><a href="/legal/aviso-legal">Aviso legal</a></li><li><a href="/legal/privacidad">Privacidad</a></li><li><a href="/legal/cookies">Cookies</a></li></ul></nav>
+  </div>
+  <p class="wrap copy">© {year} Kryosfera Solutions, S.L. · KSF Digital Healthcare</p>
+</footer>
+<style>
+  .site-footer { padding-block: 64px 28px; border-top: 1px solid var(--line); }
+  .grid { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 32px; }
+  .claim { font: 900 26px/1.1 var(--f-display); margin-top: 18px; max-width: 16ch; }
+  .addr { color: var(--muted); font-size: 15px; margin-top: 10px; }
+  ul { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+  a { text-decoration: none; color: var(--fg); opacity: .85; } a:hover { opacity: 1; }
+  .copy { color: var(--muted); font-size: 13px; margin-top: 48px; }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr 1fr; } .brandcol { grid-column: 1 / -1; } }
+</style>

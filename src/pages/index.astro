@@ -1,4 +1,8 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroReel from '../components/HeroReel.astro';
 ---
-<html lang="es"><head><meta charset="utf-8" /><title>KSF</title></head>
-<body><h1>Convertimos la ciencia en experiencias</h1></body></html>
+<BaseLayout title="KSF Digital Healthcare · Convertimos la ciencia en experiencias" description="Formación, eventos y tecnología para el sector salud." mode="oscuro" overlayHeader>
+  <HeroReel />
+  <section class="wrap" style="min-height:80vh;padding-block:80px"><h2 data-split>Siguiente sección</h2></section>
+</BaseLayout>

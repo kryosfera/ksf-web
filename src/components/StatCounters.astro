@@ -1,0 +1,21 @@
+---
+import { formatNumber } from '../lib/format';
+interface Item { valor: number; prefijo?: string; etiqueta: string }
+interface Props { items: Item[]; inHero?: boolean; class?: string }
+const { items, inHero = false, class: cls } = Astro.props;
+---
+<div class:list={['figs', cls]} data-counters data-in-hero={inHero ? '' : undefined}>
+  {items.map((it) => (
+    <div><span class="num" data-to={it.valor} data-pre={it.prefijo ?? ''}>{(it.prefijo ?? '') + formatNumber(it.valor)}</span><small>{it.etiqueta}</small></div>
+  ))}
+</div>
+<style>
+  .figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 2vw, 28px); }
+  .figs > div { border-top: 1px solid var(--line); padding-top: 12px; min-width: 0; }
+  .num { display: block; font: 900 clamp(32px, 3.6vw, 56px)/1.05 var(--f-display); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .figs > div:nth-child(odd) .num { color: var(--mint); }
+  .figs > div:nth-child(even) .num { color: var(--aqua); }
+  :global([data-mode="claro"]) .figs .num { color: var(--fg); }
+  small { display: block; font: 500 13px/1.35 var(--f-body); color: var(--muted); }
+  @media (max-width: 760px) { .figs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
