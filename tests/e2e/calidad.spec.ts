@@ -51,6 +51,20 @@ test('/404: noindex, sin desbordamiento y sin fallos graves de accesibilidad', a
   expect(r.violations.filter((v) => v.impact === 'critical' || v.impact === 'serious').map((v) => v.id)).toEqual([]);
 });
 
+test('canonical y og:url: sin .html ni barra final y presentes en el sitemap', async ({ page, request }) => {
+  const xml = await (await request.get('/sitemap-0.xml')).text();
+  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  for (const path of PAGINAS) {
+    await page.goto(path);
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+    const ogUrl = await page.locator('meta[property="og:url"]').getAttribute('content');
+    expect(canonical, path).not.toContain('.html');
+    if (canonical !== 'https://ksf.es/') expect(canonical, path).not.toMatch(/\/$/);
+    expect(ogUrl, path).toBe(canonical);
+    expect(urls, path).toContain(canonical);
+  }
+});
+
 test('sin errores de consola en la home ni en /contacto', async ({ page }) => {
   const errores: string[] = [];
   page.on('pageerror', (e) => errores.push(e.message));
@@ -73,6 +87,19 @@ test.describe('sin JavaScript', () => {
     await expect(page.locator('form')).toBeVisible();
     await page.goto('/servicios/formacion');
     await expect(page.locator('h1')).toBeVisible();
+  });
+});
+
+test.describe('menú móvil sin JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+  test('el <details> se abre y los enlaces son visibles', async ({ page }, info) => {
+    test.skip(info.project.name !== 'mobile', 'solo móvil');
+    await page.goto('/');
+    await page.getByText('Menú').click();
+    const nav = page.getByRole('navigation', { name: 'Principal móvil' });
+    await expect(nav.getByRole('link', { name: 'Nosotros' })).toBeVisible();
+    await nav.getByRole('link', { name: 'Nosotros' }).click();
+    await expect(page).toHaveURL(/\/nosotros$/);
   });
 });
 

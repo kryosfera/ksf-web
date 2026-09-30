@@ -1,7 +1,9 @@
 ---
 interface Props { title: string; description: string; jsonLd?: object; noindex?: boolean }
 const { title, description, jsonLd, noindex = false } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// Con build.format 'file' el pathname acaba en .html: se normaliza a la URL pública del sitemap.
+const ruta = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '').replace(/\/+$/, '') || '/';
+const canonical = new URL(ruta, Astro.site);
 const org = { '@context': 'https://schema.org', '@type': 'Organization', name: 'KSF Digital Healthcare',
   legalName: 'Kryosfera Solutions, S.L.', url: 'https://ksf.es', email: 'info@ksf.es', logo: 'https://ksf.es/og.png',
   address: { '@type': 'PostalAddress', streetAddress: 'Nicaragua 106', postalCode: '08029', addressLocality: 'Barcelona', addressCountry: 'ES' } };
