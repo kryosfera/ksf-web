@@ -79,13 +79,12 @@ const first = reel.shots[0];
     <h2>Un solo equipo. Nueve líneas de servicio.</h2>
     <ol class="svc">
       {servicios.map((s) => (
-        <li data-svc={s.data.numero}>
-          {shotServices.has(s.data.numero)
-            ? <button type="button"><em>{String(s.data.numero).padStart(2, '0')}</em><b>{s.data.titulo}</b></button>
-            : <a href={`/servicios/${s.id}`}><em>{String(s.data.numero).padStart(2, '0')}</em><b>{s.data.titulo}</b>{s.data.nuevo && <span class="tagnew">NUEVO 2026</span>}</a>}
+        <li data-svc={s.data.numero} data-svc-shot={shotServices.has(s.data.numero) ? '' : undefined}>
+          <a href={`/servicios/${s.id}`}><em>{String(s.data.numero).padStart(2, '0')}</em><b>{s.data.titulo}</b>{s.data.nuevo && <span class="tagnew">NUEVO 2026</span>}</a>
         </li>
       ))}
     </ol>
+    <p id="svc-hint" class="sr-only" hidden>Primer clic: muestra este servicio en el reel. Segundo clic: abre su página.</p>
   </div>
   <StatCounters items={cifras.items} inHero />
 </section>
@@ -142,14 +141,14 @@ const first = reel.shots[0];
   .panel h2 { font: 900 clamp(28px, 2.8vw, 42px)/1.05 var(--f-display); letter-spacing: -.02em; max-width: 14ch; }
   .svc { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line-h); }
   .svc li { border-bottom: 1px solid var(--line-h); }
-  .svc button, .svc a { all: unset; box-sizing: border-box; display: flex; align-items: baseline; gap: 14px; width: 100%; padding: 9px 0; font: 600 clamp(15px, 1.25vw, 18px)/1.25 var(--f-body); color: var(--muted-h); transition: color .3s; }
-  .svc button, .svc a { cursor: pointer; }
-  .svc button:hover, .svc button:focus-visible, .svc a:hover, .svc a:focus-visible { color: var(--ink); }
-  .svc :is(button, a):focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
+  .svc a { all: unset; box-sizing: border-box; display: flex; align-items: baseline; gap: 14px; width: 100%; padding: 9px 0; font: 600 clamp(15px, 1.25vw, 18px)/1.25 var(--f-body); color: var(--muted-h); transition: color .3s; }
+  .svc a { cursor: pointer; }
+  .svc a:hover, .svc a:focus-visible { color: var(--ink); }
+  .svc a:focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
   .svc em { font: 500 11px/1 var(--f-mono); font-style: normal; color: var(--muted-h); min-width: 22px; }
   .svc b { font-weight: 600; }
   .svc .tagnew { margin-left: auto; font: 600 10px/1 var(--f-mono); letter-spacing: .06em; color: #06121A; background: var(--mint); padding: 4px 6px; border-radius: 5px; }
-  .svc li.is-on :is(button, a) { color: var(--ink); }
+  .svc li.is-on a { color: var(--ink); }
   .svc li.is-on em { color: var(--mint); }
   .svc li.is-on b { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 

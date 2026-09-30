@@ -124,3 +124,37 @@ test('las fotos del reel ofrecen AVIF y WebP, con respaldo de 960 px', async ({ 
   await expect(page.locator('.shero source[type="image/avif"]')).toHaveCount(1);
   await expect(page.locator('.shero source[type="image/webp"]')).toHaveCount(1);
 });
+
+test('en móvil, tocar «01 Formación» lleva a su página', async ({ page }, info) => {
+  test.skip(info.project.name !== 'mobile', 'solo móvil');
+  await page.goto('/');
+  await expect(page.locator('[data-svc="1"] a')).not.toHaveAttribute('aria-describedby', /./);
+  await page.locator('[data-svc="1"] a').tap();
+  await expect(page).toHaveURL(/\/servicios\/formacion$/);
+});
+
+test.describe('movimiento reducido', () => {
+  test.use({ reducedMotion: 'reduce' });
+  test('las líneas del panel son enlaces que navegan', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-svc] a[href^="/servicios/"]')).toHaveCount(9);
+    await page.locator('[data-svc="2"] a').click();
+    await expect(page).toHaveURL(/\/servicios\/produccion-audiovisual$/);
+  });
+});
+
+test('en escritorio fijado, el primer clic salta el reel y el segundo abre el servicio', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop', 'solo escritorio');
+  await page.goto('/');
+  await expect(page.locator('[data-hero-reel]')).toHaveClass(/is-pinned/);
+  await page.mouse.wheel(0, 1400);
+  const link = page.locator('[data-svc="1"] a');
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute('href', '/servicios/formacion');
+  await expect(link).toHaveAttribute('aria-describedby', 'svc-hint');
+  await link.click();
+  await expect(page.locator(L3)).toHaveText('Formación mixta');
+  await expect(page).toHaveURL(/\/$/);
+  await link.click();
+  await expect(page).toHaveURL(/\/servicios\/formacion$/);
+});

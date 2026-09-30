@@ -99,13 +99,20 @@ export function initHeroReel(root: HTMLElement): () => void {
     show(i);
   }
   segs.forEach((sg, i) => on(sg, 'click', () => jump(i)));
+  // Las líneas de servicio son siempre enlaces. Solo en escritorio con el hero fijado (el reel está
+  // al lado) el primer clic salta al plano del servicio; si la línea ya está activa, el clic navega.
+  let pinned = false;
+  const shotLinks = svc.filter((el) => el.hasAttribute('data-svc-shot')).map((el) => el.querySelector('a')!);
+  // La pista para lectores de pantalla solo se asocia mientras el clic salta el reel.
+  const setHint = (onoff: boolean) => shotLinks.forEach((a) => (onoff ? a.setAttribute('aria-describedby', 'svc-hint') : a.removeAttribute('aria-describedby')));
   svc.forEach((el) => {
-    const b = el.querySelector('button'); if (!b) return;
-    on(b, 'click', () => {
+    const a = el.querySelector('a'); if (!a || !el.hasAttribute('data-svc-shot')) return;
+    on(a, 'click', (e) => {
+      if (!pinned || el.classList.contains('is-on') || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const n = Number(el.dataset.svc);
       for (let step = 1; step <= data.shots.length; step++) {
         const j = (current + step) % data.shots.length;
-        if (data.shots[j].servicio === n) { jump(j); break; }
+        if (data.shots[j].servicio === n) { e.preventDefault(); jump(j); break; }
       }
     });
   });
@@ -128,7 +135,7 @@ export function initHeroReel(root: HTMLElement): () => void {
     playing = false; live('polite'); pause.hidden = true; video?.pause();
   });
   mm.add('(min-width: 761px) and (prefers-reduced-motion: no-preference)', () => {
-    root.classList.add('is-pinned');
+    root.classList.add('is-pinned'); pinned = true; setHint(true);
     const reel = root.querySelector('.reel')!, shade = root.querySelector('.shade')!;
     const panel = root.querySelector('.panel')!, figs = root.querySelector('.figs')!;
     gsap.set([panel, figs], { autoAlpha: 0 });
@@ -144,7 +151,7 @@ export function initHeroReel(root: HTMLElement): () => void {
       .fromTo(figs, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power2.out' }, 0.62)
       .add(() => countUp(nums), 0.64)
       .to({}, { duration: 0.3 });
-    return () => { root.classList.remove('is-pinned'); gsap.set([panel, figs], { clearProps: 'all' }); };
+    return () => { root.classList.remove('is-pinned'); pinned = false; setHint(false); gsap.set([panel, figs], { clearProps: 'all' }); };
   });
   mm.add('(max-width: 760px) and (prefers-reduced-motion: no-preference)', () => {
     ScrollTrigger.create({ trigger: root.querySelector('.figs')!, start: 'top 85%', once: true, onEnter: () => countUp(nums) });
