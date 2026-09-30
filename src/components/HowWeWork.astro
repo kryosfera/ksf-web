@@ -1,0 +1,23 @@
+---
+const pasos = [
+  { n: '01', t: 'Escuchamos', d: 'Brief, contexto clínico, objetivos comerciales y marco regulatorio.' },
+  { n: '02', t: 'Proponemos', d: 'Una propuesta única con alcance, calendario y presupuesto cerrado.' },
+  { n: '03', t: 'Producimos', d: 'Equipo de cabecera, hitos semanales y visibilidad continua.' },
+  { n: '04', t: 'Medimos', d: 'Entrega, resultados y aprendizajes para la siguiente campaña.' },
+];
+---
+<section class="wrap how" aria-labelledby="how-h">
+  <span class="eyebrow">Cómo trabajamos</span>
+  <h2 id="how-h" data-split>Cuatro pasos. Un solo interlocutor.</h2>
+  <ol>{pasos.map((p) => <li data-reveal><em>{p.n}</em><h3>{p.t}</h3><p>{p.d}</p></li>)}</ol>
+</section>
+<style>
+  .how { padding-block: 96px; display: grid; gap: 16px; }
+  h2 { font-size: clamp(34px, 4vw, 56px); max-width: 16ch; }
+  ol { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+  li { border-top: 2px solid; border-image: var(--grad) 1; padding-top: 16px; display: grid; gap: 8px; }
+  em { font: 500 12px/1 var(--f-mono); font-style: normal; color: var(--accent-text); }
+  h3 { font-size: 24px; } p { color: var(--muted); font-size: 15.5px; }
+  @media (max-width: 900px) { ol { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { ol { grid-template-columns: 1fr; } }
+</style>

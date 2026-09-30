@@ -1,8 +1,37 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroReel from '../components/HeroReel.astro';
+import ClientMarquee from '../components/ClientMarquee.astro';
+import PlatformCard from '../components/PlatformCard.astro';
+import EuropeBlock from '../components/EuropeBlock.astro';
+import HowWeWork from '../components/HowWeWork.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+const clientes = (await getCollection('clientes')).map((c) => c.data);
+const plataformas = (await getCollection('plataformas')).map((p) => p.data).slice(0, 4);
 ---
-<BaseLayout title="KSF Digital Healthcare · Convertimos la ciencia en experiencias" description="Formación, eventos y tecnología para el sector salud." mode="oscuro" overlayHeader>
+<BaseLayout title="KSF Digital Healthcare · Convertimos la ciencia en experiencias" description="Agencia especializada en el sector salud: formación, eventos, congresos, producción audiovisual y tecnología. Un solo equipo, nueve líneas de servicio." mode="oscuro" overlayHeader>
   <HeroReel />
-  <section class="wrap" style="min-height:80vh;padding-block:80px"><h2 data-split>Siguiente sección</h2></section>
+  <section class="wrap block" aria-labelledby="cli-h">
+    <span class="eyebrow">Clientes</span>
+    <h2 id="cli-h" data-split>Confían en nosotros</h2>
+    <p class="lead">Laboratorios y compañías de salud que trabajan con KSF de forma recurrente.</p>
+    <ClientMarquee items={clientes} label="Logos de clientes" />
+  </section>
+  <section class="wrap block" aria-labelledby="pla-h">
+    <span class="eyebrow">Plataformas KSF</span>
+    <h2 id="pla-h" data-split>Plataformas digitales propias</h2>
+    <div class="cards">{plataformas.map((p) => <PlatformCard p={p} />)}</div>
+    <a class="btn btn-secondary more" href="/plataformas">Todas las plataformas</a>
+  </section>
+  <EuropeBlock />
+  <HowWeWork />
+  <ContactCTA />
 </BaseLayout>
+<style>
+  .block { padding-block: 96px 40px; display: grid; gap: 16px; }
+  h2 { font-size: clamp(34px, 4vw, 56px); }
+  .lead { color: var(--muted); max-width: 56ch; margin-bottom: 18px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 12px; }
+  .more { justify-self: start; margin-top: 8px; }
+</style>

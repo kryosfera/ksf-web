@@ -1,0 +1,26 @@
+---
+import congresos from '../data/congresos.json';
+---
+<section class="wrap europe" aria-labelledby="eu-h">
+  <span class="eyebrow">Congresos internacionales</span>
+  <h2 id="eu-h" data-split>Por Europa</h2>
+  <p class="lead">Acompañamos a nuestros clientes en los grandes congresos médicos internacionales.</p>
+  <div class="cols">
+    <div><h3>Presencia KSF con clientes · 2024–2026</h3>
+      <ul>{congresos.realizados.map((c) => <li data-reveal><b>{c.ciudad}</b><span>{c.evento}</span></li>)}</ul></div>
+    <div><h3>Próximos congresos · 2027</h3>
+      <ul class="next">{congresos.proximos.map((c) => <li data-reveal><b>{c.congreso}</b><span>{c.ciudad} · {c.mes}</span></li>)}</ul></div>
+  </div>
+</section>
+<style>
+  .europe { padding-block: 96px; display: grid; gap: 16px; }
+  h2 { font-size: clamp(34px, 4vw, 56px); }
+  .lead { color: var(--muted); max-width: 52ch; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 24px; }
+  h3 { font: 500 12px/1.2 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  li b { font: 800 18px/1.2 var(--f-display); } li span { color: var(--muted); text-align: right; }
+  .next { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; }
+  @media (max-width: 820px) { .cols, .next { grid-template-columns: 1fr; } }
+</style>

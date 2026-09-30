@@ -1,0 +1,20 @@
+---
+interface Props { p: { id: string; nombre: string; url: string | null; descripcion: string; publico: string; servicio: string; nota?: string } }
+const { p } = Astro.props;
+---
+<article class="pcard" data-reveal>
+  <span class="eyebrow">{p.nota ?? 'Plataforma'}</span>
+  <h3>{p.nombre}</h3>
+  <p>{p.descripcion}</p>
+  <p class="who"><b>Para:</b> {p.publico}</p>
+  {p.url
+    ? <a class="btn btn-secondary" href={p.url} target="_blank" rel="noopener">Ir a la plataforma <span aria-hidden="true">↗</span></a>
+    : <a class="btn btn-secondary" href={`/contacto?servicio=${p.servicio}`}>Pide una demo</a>}
+</article>
+<style>
+  .pcard { display: grid; gap: 12px; align-content: start; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px; min-width: 0; }
+  h3 { font-size: 22px; }
+  p { color: var(--muted); font-size: 15.5px; }
+  .who { font-size: 14px; }
+  .btn { justify-self: start; margin-top: 6px; }
+</style>

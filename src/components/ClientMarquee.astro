@@ -1,0 +1,29 @@
+---
+interface Item { nombre: string; logo: string | null; web: string | null }
+interface Props { items: Item[]; label: string }
+const { items, label } = Astro.props;
+---
+<div class="marquee" role="group" aria-label={label}>
+  <ul class="track">
+    {[...items, ...items].map((c, i) => (
+      <li aria-hidden={i >= items.length ? 'true' : undefined}>
+        {c.logo ? <img src={c.logo} alt={c.nombre} loading="lazy" height="40" /> : <span>{c.nombre}</span>}
+      </li>
+    ))}
+  </ul>
+</div>
+<style>
+  .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .track { display: flex; gap: 56px; width: max-content; list-style: none; margin: 0; padding: 12px 0; animation: marquee 60s linear infinite; }
+  .marquee:hover .track { animation-play-state: paused; }
+  li { display: flex; align-items: center; height: 48px; white-space: nowrap; }
+  img { height: 40px; width: auto; max-width: 160px; object-fit: contain; filter: grayscale(1) brightness(1.6); opacity: .8; }
+  :global([data-mode="claro"]) img { filter: grayscale(1); }
+  span { font: 800 18px/1 var(--f-display); letter-spacing: .02em; color: var(--muted); }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { -webkit-mask-image: none; mask-image: none; }
+    .track { animation: none; flex-wrap: wrap; width: auto; }
+    li[aria-hidden] { display: none; }
+  }
+</style>
