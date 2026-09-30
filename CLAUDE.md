@@ -38,7 +38,7 @@ Tras cualquier cambio: `npm test && npm run build && npm run test:e2e` (los test
   - 301 de las rutas base de colección.
   - `public/_headers` con cabeceras de seguridad.
   - Tests de referencias cruzadas.
-- **Sin remoto:** el repo solo existe en local. Falta crear `kryosfera/ksf-web` en GitHub, hacer push de `main`, añadirlo a la tabla de ksf-workspace y conectarlo a Cloudflare Pages (tarea 11).
+- **En GitHub:** `kryosfera/ksf-web`, rama `main` (subido el 30/09/2026). Falta conectarlo a Cloudflare Pages (tarea 11).
 - **Variables de entorno de Cloudflare Pages** (Production y Preview):
   - `PUBLIC_TURNSTILE_SITEKEY` es de **build**. Sin ella el formulario falla en producción.
   - `TURNSTILE_SECRET` y `RESEND_API_KEY` van como secretos.
