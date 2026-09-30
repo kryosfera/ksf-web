@@ -34,7 +34,7 @@ const json = (body: unknown, status = 200) => new Response(JSON.stringify(body),
 
 export const MAX_BODY_BYTES = 32 * 1024;
 /** Dominios desde los que se acepta el token de Turnstile: producción, local y el proyecto de Pages con sus vistas previas. */
-const HOSTNAME_OK = /^(ksf\.es|www\.ksf\.es|localhost|([a-z0-9-]+\.)?ksf-web\.pages\.dev)$/;
+const HOSTNAME_OK = /^(ksf\.es|www\.ksf\.es|nueva\.ksf\.es|localhost|([a-z0-9-]+\.)?ksf-web\.pages\.dev|([a-z0-9-]+-)?ksf-web\.joaquin-05a\.workers\.dev)$/;
 const ENV_KEYS = ['RESEND_API_KEY', 'TURNSTILE_SECRET', 'CONTACT_TO', 'CONTACT_FROM'] as const;
 
 /** Lee el cuerpo contando bytes (haya o no Content-Length); null si pasa de `max`. */

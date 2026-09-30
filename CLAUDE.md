@@ -7,10 +7,10 @@ Web corporativa de KSF Digital Healthcare. Sustituye a la web de Webflow (se da 
 - `src/data/*.json`: plataformas, clientes, organizaciones, cifras, congresos, reel y equipo.
 - `src/lib/`: lógica pura con tests (`tests/unit`).
 - `src/scripts/`: animaciones GSAP (reel, revelados, contadores) y formulario.
-- `functions/api/contacto.ts`: formulario (Resend + Turnstile).
+- `worker/index.ts` + `wrangler.jsonc`: Worker de Cloudflare que sirve `dist/` como assets y atiende `/api/contacto` (Resend + Turnstile, lógica en `src/lib/contact.ts`).
 
 ## Cómo se trabaja
-- El contenido se edita en `src/content` y `src/data`; los cambios se publican al hacer merge a `main` (Cloudflare Pages).
+- El contenido se edita en `src/content` y `src/data`; los cambios se publican al hacer merge a `main` (Cloudflare Workers Builds).
 - Antes de cada PR: `npm run build && npm test && npm run test:e2e`.
 - Modos: `oscuro` para las páginas escénicas y `claro` para las de lectura (ver spec §4).
 - Movimiento: solo transform y opacity; respetar `prefers-reduced-motion`.
@@ -38,9 +38,9 @@ Tras cualquier cambio: `npm test && npm run build && npm run test:e2e` (los test
   - 301 de las rutas base de colección.
   - `public/_headers` con cabeceras de seguridad.
   - Tests de referencias cruzadas.
-- **En GitHub:** `kryosfera/ksf-web`, rama `main` (subido el 30/09/2026). Falta conectarlo a Cloudflare Pages (tarea 11).
-- **Tarea 11 · servicios externos:** Resend con el dominio `ksf.es` y sus DNS configurados por Joaquín (30/09; no verificado desde el contenedor, que no resuelve DNS externos). Faltan la API key de envío, el widget de Turnstile, el proyecto de Pages y `nueva.ksf.es`.
-- **Variables de entorno de Cloudflare Pages** (Production y Preview):
+- **En GitHub:** `kryosfera/ksf-web`, rama `main` (subido el 30/09/2026). Conectado al Worker `ksf-web` de Cloudflare (Workers Builds: build `npm run build`, deploy `npx wrangler deploy`). Se usa Worker y no Pages; por eso el formulario vive en `worker/index.ts` y no en `functions/`.
+- **Tarea 11 · servicios externos:** Resend con el dominio `ksf.es` y sus DNS configurados por Joaquín (30/09; no verificado desde el contenedor, que no resuelve DNS externos). Faltan la API key de envío, el widget de Turnstile, las variables del Worker y `nueva.ksf.es`.
+- **Variables del Worker** (`PUBLIC_TURNSTILE_SITEKEY` en Settings → Build → Build variables; el resto en Settings → Variables and Secrets):
   - `PUBLIC_TURNSTILE_SITEKEY` es de **build**. Sin ella el formulario falla en producción.
   - `TURNSTILE_SECRET` y `RESEND_API_KEY` van como secretos.
   - `CONTACT_TO=info@ksf.es` y `CONTACT_FROM=web@ksf.es` (dominio verificado en Resend).

@@ -1,0 +1,15 @@
+// Cloudflare Workers (Workers Builds: build `npm run build`, deploy `npx wrangler deploy`).
+// El nombre debe coincidir con el del Worker en el panel.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ksf-web",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "observability": { "enabled": true }
+}

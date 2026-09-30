@@ -103,11 +103,11 @@ describe('handleContact', () => {
     expect(err).toHaveBeenCalledWith(`contacto: falta ${k}`);
     err.mockRestore();
   });
-  it.each(['ksf.es', 'www.ksf.es', 'localhost', 'ksf-web.pages.dev', 'a1b2c3d4.ksf-web.pages.dev', 'main.ksf-web.pages.dev'])('acepta el hostname %s', async (h) => {
+  it.each(['ksf.es', 'www.ksf.es', 'localhost', 'ksf-web.pages.dev', 'a1b2c3d4.ksf-web.pages.dev', 'main.ksf-web.pages.dev', 'nueva.ksf.es', 'ksf-web.joaquin-05a.workers.dev', '1a2b3c4d-ksf-web.joaquin-05a.workers.dev'])('acepta el hostname %s', async (h) => {
     const f = vi.fn(async (u: string | URL | Request, _i?: RequestInit) => String(u).includes('turnstile') ? new Response(JSON.stringify({ success: true, hostname: h })) : new Response('{}'));
     expect((await handleContact(req(base), env, f as unknown as typeof fetch)).status).toBe(200);
   });
-  it.each(['otro.pages.dev', 'ksf-web.pages.dev.evil.com', 'x.y.ksf-web.pages.dev', 'ksf.es.evil.com'])('rechaza el hostname %s', async (h) => {
+  it.each(['otro.pages.dev', 'ksf-web.pages.dev.evil.com', 'x.y.ksf-web.pages.dev', 'ksf.es.evil.com', 'otro.joaquin-05a.workers.dev', 'ksf-web.otro.workers.dev'])('rechaza el hostname %s', async (h) => {
     const err = vi.spyOn(console, 'error').mockImplementation(() => {});
     const f = vi.fn(async (u: string | URL | Request, _i?: RequestInit) => String(u).includes('turnstile') ? new Response(JSON.stringify({ success: true, hostname: h })) : new Response('{}'));
     expect((await handleContact(req(base), env, f as unknown as typeof fetch)).status).toBe(400);
