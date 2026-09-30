@@ -3,6 +3,7 @@ interface Item { nombre: string; logo: string | null; web: string | null }
 interface Props { items: Item[]; label: string }
 const { items, label } = Astro.props;
 ---
+<div class="mq" data-marquee>
 <div class="marquee" role="group" aria-label={label}>
   <ul class="track">
     {[...items, ...items].map((c, i) => (
@@ -12,10 +13,27 @@ const { items, label } = Astro.props;
     ))}
   </ul>
 </div>
+<button class="mq-pause" type="button" data-marquee-pause aria-pressed="false"><span aria-hidden="true" data-marquee-glyph>❚❚</span> Pausar logos</button>
+</div>
+<script>
+  // Delegado en document: sobrevive a los cambios de página del ClientRouter sin volver a registrarse.
+  document.addEventListener('click', (e) => {
+    const b = (e.target as Element | null)?.closest<HTMLButtonElement>('[data-marquee-pause]');
+    if (!b) return;
+    const paused = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', String(paused));
+    b.closest('[data-marquee]')?.classList.toggle('is-paused', paused);
+    const g = b.querySelector('[data-marquee-glyph]'); if (g) g.textContent = paused ? '▶' : '❚❚';
+  });
+</script>
 <style>
+  .mq { display: grid; gap: 6px; }
   .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
   .track { display: flex; width: max-content; list-style: none; margin: 0; padding: 12px 0; animation: marquee 60s linear infinite; }
-  .marquee:hover .track { animation-play-state: paused; }
+  .marquee:hover .track, .mq:focus-within .track, .mq.is-paused .track { animation-play-state: paused; }
+  .mq-pause { justify-self: end; border: 1px solid var(--line); background: none; color: var(--muted); border-radius: 999px; padding: 6px 11px; font: 600 12px/1 var(--f-body); cursor: pointer; }
+  .mq-pause:hover, .mq-pause:focus-visible { color: var(--fg); }
+  .mq-pause[aria-pressed="true"] { border-color: currentColor; }
   li { display: flex; align-items: center; height: 48px; white-space: nowrap; padding-right: 56px; }
   img { height: 40px; width: auto; max-width: 160px; object-fit: contain; filter: grayscale(1) brightness(1.6); opacity: .8; }
   :global([data-mode="claro"]) img { filter: grayscale(1); }
@@ -25,5 +43,6 @@ const { items, label } = Astro.props;
     .marquee { -webkit-mask-image: none; mask-image: none; }
     .track { animation: none; flex-wrap: wrap; width: auto; row-gap: 12px; }
     li[aria-hidden] { display: none; }
+    .mq-pause { display: none; }
   }
 </style>

@@ -21,6 +21,7 @@ export function initHeroReel(root: HTMLElement): () => void {
   const tc = root.querySelector<HTMLElement>('[data-tc]')!;
   const l3 = root.querySelector<HTMLElement>('.l3')!;
   const pause = root.querySelector<HTMLButtonElement>('[data-pause]')!;
+  const glyph = pause.querySelector<HTMLElement>('[data-pause-glyph]');
   const svc = [...root.querySelectorAll<HTMLElement>('[data-svc]')];
   const nums = [...root.querySelectorAll<HTMLElement>('.num')];
   let video = root.querySelector<HTMLVideoElement>('video[data-reel-video]');
@@ -118,8 +119,10 @@ export function initHeroReel(root: HTMLElement): () => void {
   });
   on(pause, 'click', () => {
     playing = !playing;
-    pause.textContent = playing ? '❚❚ Pausa' : '▶ Reproducir';
+    // Etiqueta fija («Pausar reel»); el estado lo dan aria-pressed y el glifo (oculto a lectores).
+    if (glyph) glyph.textContent = playing ? '❚❚' : '▶';
     pause.setAttribute('aria-pressed', String(!playing));
+    root.classList.toggle('is-paused', !playing);
     live(playing ? 'off' : 'polite');
     if (videoReady()) (playing ? video!.play() : video!.pause());
   });

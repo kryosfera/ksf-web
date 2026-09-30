@@ -70,7 +70,7 @@ const first = reel.shots[0];
         {reel.shots.map((s, i) => <button type="button" class="seg" data-seg aria-label={`Plano ${i + 1}: ${s.titulo}`}><i></i></button>)}
       </div>
       <span class="tc" data-tc aria-hidden="true">01 / {String(reel.shots.length).padStart(2, '0')}</span>
-      <button class="pp" type="button" data-pause aria-pressed="false">❚❚ Pausa</button>
+      <button class="pp" type="button" data-pause aria-pressed="false"><span class="pp-g" aria-hidden="true" data-pause-glyph>❚❚</span> Pausar reel</button>
     </div>
   </div>
 
@@ -105,6 +105,7 @@ const first = reel.shots[0];
   .grain { position: absolute; inset: -50%; z-index: 2; pointer-events: none; opacity: .07;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     animation: grain 1s steps(6) infinite; }
+  .hero.is-paused .grain { animation-play-state: paused; }
   @keyframes grain { 0% { transform: translate(0,0); } 20% { transform: translate(-3%,2%); } 40% { transform: translate(2%,-3%); } 60% { transform: translate(-2%,-1%); } 80% { transform: translate(3%,3%); } 100% { transform: translate(0,0); } }
 
   .intro { position: absolute; z-index: 4; left: 5%; bottom: 17%; max-width: min(52%, 760px); }
@@ -135,6 +136,8 @@ const first = reel.shots[0];
   .tc { font: 500 11px/1 var(--f-mono); letter-spacing: .08em; color: var(--muted-h); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .pp { border: 1px solid var(--line-h); background: rgba(5,9,14,.35); color: var(--ink); border-radius: 999px; padding: 8px 13px; font: 600 12.5px/1 var(--f-body); white-space: nowrap; cursor: pointer; }
   .pp[hidden] { display: none; }
+  .pp[aria-pressed="true"] { border-color: var(--aqua); }
+  .pp-g { display: inline-block; min-width: 1.1em; }
 
   /* servicios y cifras: bloques normales en móvil o sin movimiento; superpuestos en escritorio */
   .panel { padding: 44px 5% 12px; display: grid; gap: 18px; }

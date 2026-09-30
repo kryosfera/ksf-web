@@ -158,3 +158,18 @@ test('en escritorio fijado, el primer clic salta el reel y el segundo abre el se
   await link.click();
   await expect(page).toHaveURL(/\/servicios\/formacion$/);
 });
+
+test('el botón de pausa tiene etiqueta fija, aria-pressed y para también el grano', async ({ page }) => {
+  await page.goto('/');
+  const pp = page.locator('[data-pause]');
+  await expect(pp).toHaveAccessibleName('Pausar reel');
+  await expect(pp).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('.grain')).toHaveCSS('animation-play-state', 'running');
+  await pp.click();
+  await expect(pp).toHaveAccessibleName('Pausar reel');
+  await expect(pp).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.grain')).toHaveCSS('animation-play-state', 'paused');
+  await pp.click();
+  await expect(pp).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('.grain')).toHaveCSS('animation-play-state', 'running');
+});
