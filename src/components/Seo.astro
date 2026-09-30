@@ -1,6 +1,6 @@
 ---
-interface Props { title: string; description: string; jsonLd?: object }
-const { title, description, jsonLd } = Astro.props;
+interface Props { title: string; description: string; jsonLd?: object; noindex?: boolean }
+const { title, description, jsonLd, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const org = { '@context': 'https://schema.org', '@type': 'Organization', name: 'KSF Digital Healthcare',
   legalName: 'Kryosfera Solutions, S.L.', url: 'https://ksf.es', email: 'info@ksf.es', logo: 'https://ksf.es/og.png',
@@ -8,6 +8,7 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', name: '
 ---
 <title>{title}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex" />}
 <link rel="canonical" href={canonical} />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="es_ES" />

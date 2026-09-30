@@ -44,6 +44,6 @@ const sitekey = envKey ?? '1x00000000000000000000AA';
   .trap { position: absolute; left: -9999px; }
   .btn { justify-self: start; } .btn[disabled] { opacity: .6; cursor: progress; }
   .status { font-weight: 600; }
-  .check a { color: var(--accent-text); }
+  .check a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
   @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
 </style>
