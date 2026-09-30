@@ -78,6 +78,41 @@ describe('handleContact', () => {
     const q = new Request('https://ksf.es/api/contacto', { method: 'POST', body: '{}', headers: { 'content-type': 'application/json', 'content-length': '40000' } });
     expect((await handleContact(q, env, fakeFetch(true, true) as unknown as typeof fetch)).status).toBe(413);
   });
+  it('413 sin Content-Length si el cuerpo leído supera 32 KB, sin llamar a nadie', async () => {
+    const trozo = new TextEncoder().encode('x'.repeat(8 * 1024));
+    let enviados = 0;
+    const stream = new ReadableStream<Uint8Array>({ pull(c) { if (enviados++ < 6) c.enqueue(trozo); else c.close(); } });
+    const q = new Request('https://ksf.es/api/contacto', { method: 'POST', body: stream, headers: { 'content-type': 'application/x-www-form-urlencoded' }, duplex: 'half' } as RequestInit);
+    expect(q.headers.get('content-length')).toBeNull();
+    const f = fakeFetch(true, true);
+    expect((await handleContact(q, env, f as unknown as typeof fetch)).status).toBe(413);
+    expect(f).not.toHaveBeenCalled();
+  });
+  it('un cuerpo pequeño en stream sin Content-Length se procesa', async () => {
+    const body = new TextEncoder().encode(new URLSearchParams(base).toString());
+    const stream = new ReadableStream<Uint8Array>({ start(c) { c.enqueue(body); c.close(); } });
+    const q = new Request('https://ksf.es/api/contacto', { method: 'POST', body: stream, headers: { 'content-type': 'application/x-www-form-urlencoded' }, duplex: 'half' } as RequestInit);
+    expect((await handleContact(q, env, fakeFetch(true, true) as unknown as typeof fetch)).status).toBe(200);
+  });
+  it.each(['RESEND_API_KEY', 'TURNSTILE_SECRET', 'CONTACT_TO', 'CONTACT_FROM'] as const)('500 y console.error si falta %s', async (k) => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const f = fakeFetch(true, true);
+    const r = await handleContact(req(base), { ...env, [k]: '' }, f as unknown as typeof fetch);
+    expect(r.status).toBe(500);
+    expect(f).not.toHaveBeenCalled();
+    expect(err).toHaveBeenCalledWith(`contacto: falta ${k}`);
+    err.mockRestore();
+  });
+  it.each(['ksf.es', 'www.ksf.es', 'localhost', 'ksf-web.pages.dev', 'a1b2c3d4.ksf-web.pages.dev', 'main.ksf-web.pages.dev'])('acepta el hostname %s', async (h) => {
+    const f = vi.fn(async (u: string | URL | Request, _i?: RequestInit) => String(u).includes('turnstile') ? new Response(JSON.stringify({ success: true, hostname: h })) : new Response('{}'));
+    expect((await handleContact(req(base), env, f as unknown as typeof fetch)).status).toBe(200);
+  });
+  it.each(['otro.pages.dev', 'ksf-web.pages.dev.evil.com', 'x.y.ksf-web.pages.dev', 'ksf.es.evil.com'])('rechaza el hostname %s', async (h) => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const f = vi.fn(async (u: string | URL | Request, _i?: RequestInit) => String(u).includes('turnstile') ? new Response(JSON.stringify({ success: true, hostname: h })) : new Response('{}'));
+    expect((await handleContact(req(base), env, f as unknown as typeof fetch)).status).toBe(400);
+    err.mockRestore();
+  });
   it('415 si el Content-Type no es admitido', async () => {
     const q = new Request('https://ksf.es/api/contacto', { method: 'POST', body: 'x', headers: { 'content-type': 'text/plain' } });
     expect((await handleContact(q, env, fakeFetch(true, true) as unknown as typeof fetch)).status).toBe(415);

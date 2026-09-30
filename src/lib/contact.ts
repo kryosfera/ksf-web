@@ -33,19 +33,50 @@ export function escapeHtml(t: string): string {
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 
 export const MAX_BODY_BYTES = 32 * 1024;
-const HOSTNAME_OK = /^(ksf\.es|www\.ksf\.es|localhost|[a-z0-9-]+(\.[a-z0-9-]+)*\.pages\.dev)$/;
+/** Dominios desde los que se acepta el token de Turnstile: producción, local y el proyecto de Pages con sus vistas previas. */
+const HOSTNAME_OK = /^(ksf\.es|www\.ksf\.es|localhost|([a-z0-9-]+\.)?ksf-web\.pages\.dev)$/;
+const ENV_KEYS = ['RESEND_API_KEY', 'TURNSTILE_SECRET', 'CONTACT_TO', 'CONTACT_FROM'] as const;
+
+/** Lee el cuerpo contando bytes (haya o no Content-Length); null si pasa de `max`. */
+async function readBody(request: Request, max: number): Promise<Uint8Array<ArrayBuffer> | null> {
+  if (!request.body) return new Uint8Array();
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > max) { await reader.cancel().catch(() => {}); return null; }
+    chunks.push(value);
+  }
+  const out = new Uint8Array(total);
+  let off = 0;
+  for (const c of chunks) { out.set(c, off); off += c.byteLength; }
+  return out;
+}
 
 export async function handleContact(request: Request, env: ContactEnv, fetchFn: typeof fetch = fetch): Promise<Response> {
   if (request.method !== 'POST') return new Response(JSON.stringify({ ok: false, error: 'metodo' }), { status: 405, headers: { 'content-type': 'application/json', Allow: 'POST' } });
+  const missing = ENV_KEYS.filter((k) => !env?.[k]);
+  if (missing.length) {
+    console.error(`contacto: falta ${missing.join(', ')}`);
+    return json({ ok: false, error: 'configuracion' }, 500);
+  }
   const len = Number(request.headers.get('content-length') ?? 0);
   if (len > MAX_BODY_BYTES) return json({ ok: false, error: 'tamano' }, 413);
   const ct = (request.headers.get('content-type') ?? '').toLowerCase();
   const isJson = ct.includes('application/json');
   if (!isJson && !ct.includes('multipart/form-data') && !ct.includes('application/x-www-form-urlencoded')) return json({ ok: false, error: 'tipo' }, 415);
 
+  let bytes: Uint8Array<ArrayBuffer> | null;
+  try { bytes = await readBody(request, MAX_BODY_BYTES); } catch { bytes = new Uint8Array(); }
+  if (!bytes) return json({ ok: false, error: 'tamano' }, 413);
+
   let raw: unknown;
   try {
-    raw = isJson ? await request.json() : Object.fromEntries((await request.formData()).entries());
+    raw = isJson ? JSON.parse(new TextDecoder().decode(bytes))
+      : Object.fromEntries((await new Response(bytes, { headers: { 'content-type': request.headers.get('content-type') ?? '' } }).formData()).entries());
   } catch { return json({ ok: false, errors: { form: 'No se ha podido leer el formulario.' } }, 400); }
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return json({ ok: false, errors: { form: 'No se ha podido leer el formulario.' } }, 400);
   const body = raw as Record<string, unknown>;

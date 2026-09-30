@@ -92,3 +92,28 @@ test('Turnstile se vuelve a renderizar al volver a /contacto sin recarga y el en
   await expect(page.locator('[data-form-status]')).toContainText('Hemos recibido');
   expect(cuerpo).toContain('tok-stub');
 });
+
+test('el éxito no promete el acuse por email', async ({ page }) => {
+  await page.route('**/api/contacto', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }));
+  await page.goto('/contacto'); await rellenar(page);
+  await page.click('button[type=submit]');
+  await expect(page.locator('[data-form-status]')).toContainText('Hemos recibido tu solicitud');
+  await expect(page.locator('[data-form-status]')).not.toContainText('acuse');
+});
+
+test('un error general del servidor (errors.form) se muestra en el estado', async ({ page }) => {
+  await page.route('**/api/contacto', (r) => r.fulfill({ status: 400, contentType: 'application/json', body: '{"ok":false,"errors":{"form":"No se ha podido leer el formulario."}}' }));
+  await page.goto('/contacto'); await rellenar(page);
+  await page.click('button[type=submit]');
+  await expect(page.locator('[data-form-status]')).toContainText('No se ha podido leer el formulario.');
+  await expect(page.locator('[data-form-status]')).toContainText('info@ksf.es');
+  await expect(page.locator('[data-form-status]')).not.toContainText('Revisa los campos marcados');
+});
+
+test.describe('sin JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+  test('el formulario remite a info@ksf.es', async ({ page }) => {
+    await page.goto('/contacto');
+    await expect(page.locator('.cform .nojs a[href="mailto:info@ksf.es"]')).toBeVisible();
+  });
+});

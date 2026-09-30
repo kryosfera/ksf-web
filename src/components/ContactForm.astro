@@ -7,6 +7,7 @@ if (!envKey && import.meta.env.PROD) console.warn('[contacto] AVISO: falta PUBLI
 const sitekey = envKey ?? '1x00000000000000000000AA';
 ---
 <form class="cform" data-contact-form action="/api/contacto" method="post" novalidate>
+  <noscript><p class="nojs">Este formulario necesita JavaScript activado. Si lo prefieres, escríbenos directamente a <a href="mailto:info@ksf.es">info@ksf.es</a>.</p></noscript>
   <div class="grid">
     <div class="field"><label for="nombre">Nombre *<input id="nombre" name="nombre" required autocomplete="name" aria-describedby="nombre-error" /></label><p class="err" role="alert" id="nombre-error"></p></div>
     <div class="field"><label for="empresa">Empresa *<input id="empresa" name="empresa" required autocomplete="organization" aria-describedby="empresa-error" /></label><p class="err" role="alert" id="empresa-error"></p></div>
@@ -44,6 +45,7 @@ const sitekey = envKey ?? '1x00000000000000000000AA';
   .trap { position: absolute; left: -9999px; }
   .btn { justify-self: start; } .btn[disabled] { opacity: .6; cursor: progress; }
   .status { font-weight: 600; }
-  .check a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+  .nojs { font-weight: 600; }
+  .nojs a, .check a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
   @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
 </style>

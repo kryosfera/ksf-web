@@ -1,4 +1,13 @@
+# Variables de la Pages Function /api/contacto (runtime). Copia este archivo a .dev.vars
+# para `wrangler pages dev`; en producción van en Cloudflare Pages > Settings > Variables
+# (RESEND_API_KEY y TURNSTILE_SECRET como secretos). Si falta alguna, /api/contacto responde 500.
 RESEND_API_KEY=re_xxx
+# Secreto de PRUEBA público de Turnstile (siempre valida). En producción, el secreto real.
 TURNSTILE_SECRET=1x0000000000000000000000000000000AA
 CONTACT_TO=info@ksf.es
 CONTACT_FROM=web@ksf.es
+
+# OJO: PUBLIC_TURNSTILE_SITEKEY NO va aquí. Es una variable de BUILD (Astro la incrusta en el
+# HTML): en local ponla en .env y en Cloudflare Pages en las variables del entorno de build
+# (Production y Preview). Si falta, el build usa el sitekey de prueba y en producción el
+# formulario falla en todos los envíos.

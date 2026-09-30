@@ -45,14 +45,16 @@ onPage(() => {
       const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
       const body = await res.json().catch(() => ({}));
       if (res.ok && body.ok) {
-        form.reset(); status.textContent = 'Hemos recibido tu solicitud. Te responderemos en breve; también te hemos enviado un acuse por email.';
+        form.reset(); status.textContent = 'Hemos recibido tu solicitud. Te responderemos en breve.';
       } else if (res.status === 400 && body.errors) {
         for (const [k, msg] of Object.entries(body.errors as Record<string, string>)) {
           const el = form.querySelector<HTMLElement>(`#${k}-error`); if (el) el.textContent = msg;
           form.querySelector(`#${k}`)?.setAttribute('aria-invalid', 'true');
         }
         status.setAttribute('role', 'alert');
-        status.textContent = 'Revisa los campos marcados.';
+        // errors.form: el servidor no pudo leer el envío; no hay ningún campo que marcar.
+        const formMsg = (body.errors as Record<string, string>).form;
+        status.textContent = formMsg ? `${formMsg} Inténtalo de nuevo o escríbenos a info@ksf.es.` : 'Revisa los campos marcados.';
         const first = [...form.querySelectorAll<HTMLElement>('[aria-invalid="true"]')][0];
         first?.focus();
       } else {
