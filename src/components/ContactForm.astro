@@ -1,7 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 const servicios = (await getCollection('servicios')).sort((a, b) => a.data.numero - b.data.numero);
-const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '1x00000000000000000000AA';
+const envKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
+// 1x0000…AA es el sitekey de prueba de Cloudflare: en producción hay que definir PUBLIC_TURNSTILE_SITEKEY.
+if (!envKey && import.meta.env.PROD) console.warn('[contacto] AVISO: falta PUBLIC_TURNSTILE_SITEKEY; el build usa el sitekey de PRUEBA de Turnstile y el formulario no funcionará en producción.');
+const sitekey = envKey ?? '1x00000000000000000000AA';
 ---
 <form class="cform" data-contact-form action="/api/contacto" method="post" novalidate>
   <div class="grid">
@@ -20,12 +23,11 @@ const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '1x00000000000000000
   <div class="trap" aria-hidden="true"><label for="web">No rellenes este campo<input id="web" name="web" tabindex="-1" autocomplete="off" /></label></div>
   <label class="check" for="privacidad"><input id="privacidad" name="privacidad" type="checkbox" required aria-describedby="privacidad-error" /> <span>He leído y acepto la <a href="/legal/privacidad">política de privacidad</a>. *</span></label>
   <p class="err" role="alert" id="privacidad-error"></p>
-  <div class="cf-turnstile" data-sitekey={sitekey} data-language="es"></div>
+  <div data-turnstile data-sitekey={sitekey}></div>
   <p class="err" role="alert" id="token-error"></p>
   <button class="btn btn-primary" type="submit">Enviar solicitud</button>
   <p class="status" data-form-status role="status"></p>
 </form>
-<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>import '../scripts/contact-form';</script>
 <style>
   .cform { display: grid; gap: 14px; max-width: 760px; }

@@ -1,6 +1,23 @@
 import { onPage } from './lifecycle';
 import { SERVICIO_SLUGS } from '../lib/servicios';
 
+interface TurnstileApi { render: (el: HTMLElement, o: { sitekey: string; language?: string }) => string; remove: (id: string) => void; reset: (id?: string) => void }
+const w = window as unknown as { turnstile?: TurnstileApi };
+let loading: Promise<TurnstileApi | undefined> | undefined;
+/** Carga api.js una sola vez (render explícito: el ClientRouter no vuelve a ejecutar scripts). */
+function loadTurnstile(): Promise<TurnstileApi | undefined> {
+  if (w.turnstile) return Promise.resolve(w.turnstile);
+  loading ??= new Promise((resolve) => {
+    const el = document.createElement('script');
+    el.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    el.async = true;
+    el.onload = () => resolve(w.turnstile);
+    el.onerror = () => { loading = undefined; resolve(undefined); };
+    document.head.appendChild(el);
+  });
+  return loading;
+}
+
 onPage(() => {
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
   if (!form) return;
@@ -9,6 +26,13 @@ onPage(() => {
   const sel = form.querySelector<HTMLSelectElement>('#servicio')!;
   const pre = new URLSearchParams(location.search).get('servicio');
   if (pre && ((SERVICIO_SLUGS as readonly string[]).includes(pre) || pre === 'otra')) sel.value = pre;
+
+  let widgetId: string | undefined;
+  let gone = false;
+  const holder = form.querySelector<HTMLElement>('[data-turnstile]');
+  if (holder) void loadTurnstile().then((t) => {
+    if (t && !gone) widgetId = t.render(holder, { sitekey: holder.dataset.sitekey ?? '', language: 'es' });
+  });
 
   let sending = false;
   const clear = () => form.querySelectorAll<HTMLElement>('.err').forEach((e) => { e.textContent = ''; });
@@ -40,9 +64,13 @@ onPage(() => {
       status.textContent = 'No hemos podido enviar tu solicitud. Inténtalo de nuevo o escríbenos a info@ksf.es.';
     } finally {
       sending = false; btn.disabled = false; btn.textContent = 'Enviar solicitud';
-      (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+      if (widgetId) w.turnstile?.reset(widgetId);
     }
   };
   form.addEventListener('submit', onSubmit);
-  return () => form.removeEventListener('submit', onSubmit);
+  return () => {
+    form.removeEventListener('submit', onSubmit);
+    gone = true;
+    if (widgetId) w.turnstile?.remove(widgetId);
+  };
 });
