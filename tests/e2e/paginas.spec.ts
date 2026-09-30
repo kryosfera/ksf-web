@@ -23,6 +23,16 @@ test('la política de cookies dice que no se usan cookies de analítica', async 
   await expect(page.getByText('no utiliza cookies de analítica')).toBeVisible();
 });
 
+test('el aviso legal no afirma que se usen cookies ni Google y remite a la política de cookies', async ({ page }) => {
+  await page.goto('/legal/aviso-legal');
+  const main = page.locator('main');
+  await expect(main).not.toContainText('Google');
+  await expect(main).not.toContainText('tecnología “cookie”');
+  await expect(main).toContainText('no utiliza cookies propias ni de terceros con fines analíticos o publicitarios');
+  await expect(main).toContainText('Cloudflare Web Analytics');
+  await expect(main.locator('a[href="/legal/cookies"]').first()).toBeAttached();
+});
+
 test('una ruta inexistente da 404 con enlace a inicio', async ({ page }) => {
   const res = await page.goto('/no-existe');
   expect(res?.status()).toBe(404);
