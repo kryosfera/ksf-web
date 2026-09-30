@@ -1,0 +1,9 @@
+---
+interface Props { titulo: string; texto: string }
+const { titulo, texto } = Astro.props;
+---
+<article class="case" data-reveal><span class="eyebrow">Caso</span><h3>{titulo}</h3><p>{texto}</p></article>
+<style>
+  .case { border-left: 3px solid; border-image: var(--grad) 1; padding: 6px 0 6px 18px; display: grid; gap: 6px; }
+  h3 { font-size: 22px; } p { color: var(--muted); }
+</style>

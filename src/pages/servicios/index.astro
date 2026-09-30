@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+const servicios = (await getCollection('servicios')).sort((a, b) => a.data.numero - b.data.numero);
+---
+<BaseLayout title="Servicios · KSF Digital Healthcare" description="Un solo equipo, nueve líneas de servicio: formación, producción audiovisual, streaming, eventos, congresos, interactivos, diseño gráfico, packaging y piezas de anatomía." mode="claro">
+  <section class="wrap head">
+    <span class="eyebrow">Servicios</span>
+    <h1 data-split>Un solo equipo. Nueve líneas de servicio.</h1>
+  </section>
+  <section class="wrap grid">
+    {servicios.map((s) => (
+      <a class="svc-card" href={`/servicios/${s.id}`} data-reveal>
+        <em>{String(s.data.numero).padStart(2, '0')}</em>
+        <h2>{s.data.titulo}{s.data.nuevo && <span class="tagnew">NUEVO 2026</span>}</h2>
+        <p>{s.data.entradilla}</p>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
+    ))}
+  </section>
+  <ContactCTA />
+</BaseLayout>
+<style>
+  .head { padding-block: 72px 32px; display: grid; gap: 14px; }
+  h1 { font-size: clamp(40px, 5.6vw, 84px); font-weight: 900; max-width: 14ch; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-bottom: 96px; }
+  .svc-card { display: grid; gap: 10px; align-content: start; text-decoration: none; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px; transition: border-color .2s, transform .2s; }
+  .svc-card:hover { border-color: var(--fg); transform: translateY(-2px); }
+  em { font: 500 12px/1 var(--f-mono); font-style: normal; color: var(--accent-text); }
+  h2 { font-size: 24px; } p { color: var(--muted); font-size: 15px; }
+  .go { font-size: 20px; }
+  .tagnew { margin-left: 8px; vertical-align: middle; font: 600 10px/1 var(--f-mono); color: #06121A; background: var(--mint); padding: 4px 6px; border-radius: 5px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+</style>

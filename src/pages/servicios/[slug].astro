@@ -1,0 +1,55 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHero from '../../components/SectionHero.astro';
+import CaseBlock from '../../components/CaseBlock.astro';
+import PlatformCard from '../../components/PlatformCard.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+
+export async function getStaticPaths() {
+  const servicios = await getCollection('servicios');
+  return servicios.map((s) => ({ params: { slug: s.id }, props: { s } }));
+}
+const { s } = Astro.props as { s: CollectionEntry<'servicios'> };
+const d = s.data;
+const files = import.meta.glob<{ default: ImageMetadata }>('../../assets/reel/*', { eager: true });
+const imagen = d.imagen ? files[`../../assets/reel/${d.imagen}`]?.default : undefined;
+const plataformas = (await getCollection('plataformas')).map((p) => p.data).filter((p) => d.plataformas.includes(p.id));
+const jsonLd = { '@context': 'https://schema.org', '@type': 'Service', name: d.titulo, description: d.entradilla,
+  provider: { '@type': 'Organization', name: 'KSF Digital Healthcare', url: 'https://ksf.es' }, areaServed: 'ES' };
+---
+<BaseLayout title={d.seo.titulo} description={d.seo.descripcion} mode={d.modo} jsonLd={jsonLd}>
+  <SectionHero numero={d.numero} titulo={d.titulo} entradilla={d.entradilla} nuevo={d.nuevo} imagen={imagen} />
+  <section class="wrap subs">
+    {d.subservicios.map((sub, i) => (
+      <article class="sub-item" data-reveal>
+        <span class="idx">{String(d.numero).padStart(2, '0')}.{i + 1}</span>
+        <div class="txt">
+          <h2>{sub.titulo}</h2>
+          <p>{sub.descripcion}</p>
+        </div>
+        <ul>{sub.items.map((it) => <li>{it}</li>)}</ul>
+        {sub.ejemplos && <div class="ej"><span class="eyebrow">Ejemplos de programas</span><ul>{sub.ejemplos.map((e) => <li>{e}</li>)}</ul></div>}
+      </article>
+    ))}
+  </section>
+  {d.casos.length > 0 && <section class="wrap cases"><h2 class="h2s">Casos y ejemplos</h2>{d.casos.map((c) => <CaseBlock titulo={c.titulo} texto={c.texto} />)}</section>}
+  {plataformas.length > 0 && <section class="wrap plats"><h2 class="h2s">Plataformas relacionadas</h2><div class="cards">{plataformas.map((p) => <PlatformCard p={p} />)}</div></section>}
+  <ContactCTA servicio={s.id} />
+</BaseLayout>
+<style>
+  .subs { display: grid; gap: 0; padding-block: 24px 64px; }
+  .sub-item { display: grid; grid-template-columns: 70px minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; padding-block: 40px; border-top: 1px solid var(--line); }
+  .idx { font: 500 13px/1.6 var(--f-mono); color: var(--accent-text); }
+  h2 { font-size: clamp(26px, 2.6vw, 36px); margin-bottom: 12px; }
+  .txt p { color: var(--muted); max-width: 52ch; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  li { padding-left: 18px; position: relative; }
+  li::before { content: ""; position: absolute; left: 0; top: .72em; width: 8px; height: 2px; background: var(--grad); }
+  .ej { grid-column: 2 / -1; display: grid; gap: 10px; }
+  .ej ul { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .cases, .plats { display: grid; gap: 20px; padding-block: 24px 64px; }
+  .h2s { font-size: clamp(28px, 3vw, 40px); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  @media (max-width: 860px) { .sub-item { grid-template-columns: 1fr; gap: 14px; } .ej { grid-column: auto; } }
+</style>

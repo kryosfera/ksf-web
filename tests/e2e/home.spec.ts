@@ -33,19 +33,12 @@ test('ida y vuelta con ClientRouter: el hero sigue vivo y sin errores de consola
   const L3 = '[data-hero-reel] [data-l3-t]';
   await page.goto('/');
   await expect(page.locator(L3)).toHaveText('Desde plató');
-  // Aún no hay otra página interna (un 404 en preview provoca carga completa, no transición).
-  // Se navega a «/?otra», que sirve la home con otra URL y obliga a ClientRouter a cambiar de página y reinicializar.
-  await page.evaluate(() => {
-    (window as any).__spa = 1;
-    const a = document.createElement('a'); a.href = '/?otra'; a.id = 'go'; a.textContent = 'ir';
-    a.style.cssText = 'position:fixed;top:0;left:0;z-index:9999;padding:20px;background:#fff;color:#000';
-    document.body.append(a);
-  });
-  await page.locator('#go').click();
-  await expect(page).toHaveURL(/\?otra$/);
-  await expect(page.locator('[data-hero-reel]')).toHaveCount(1);
-  await page.locator('[data-seg]').nth(4).click();
-  await expect(page.locator(L3)).toHaveText('Stands y montajes');
+  // Navegación real por un enlace interno: ClientRouter cambia de página sin recarga completa.
+  await page.evaluate(() => { (window as any).__spa = 1; });
+  await page.locator('a[href="/servicios"]').first().evaluate((a: HTMLElement) => a.click());
+  await expect(page).toHaveURL(/\/servicios$/);
+  await expect(page.locator('h1')).toContainText('Un solo equipo');
+  await expect(page.locator('[data-hero-reel]')).toHaveCount(0);
   await page.goBack();
   await expect(page).toHaveURL(/\/$/);
   expect(await page.evaluate(() => (window as any).__spa)).toBe(1); // sin recarga completa: fue ClientRouter
