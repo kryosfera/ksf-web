@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+<BaseLayout title="Contacto · KSF Digital Healthcare" description="Pide una propuesta a KSF Digital Healthcare: formación, eventos, congresos, producción audiovisual y tecnología para el sector salud." mode="claro">
+  <section class="wrap cols">
+    <div class="intro">
+      <span class="eyebrow">Hablemos</span>
+      <h1 data-split>¿Construimos juntos vuestra próxima idea?</h1>
+      <p class="lead">Cuéntanos qué necesitas y te enviaremos una propuesta única con alcance, calendario y presupuesto cerrado.</p>
+      <dl>
+        <dt>Email</dt><dd><a href="mailto:info@ksf.es">info@ksf.es</a></dd>
+        <dt>Dirección comercial</dt><dd>Marta Blázquez · <a href="mailto:marta@kryosfera.com">marta@kryosfera.com</a> · <a href="tel:+34610208652">+34 610 208 652</a></dd>
+        <dt>Oficina</dt><dd>Nicaragua 106, 08029 Barcelona</dd>
+      </dl>
+    </div>
+    <ContactForm />
+  </section>
+</BaseLayout>
+<style>
+  .cols { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 72px); padding-block: 72px 110px; }
+  .intro { display: grid; gap: 16px; align-content: start; }
+  h1 { font-size: clamp(36px, 4.6vw, 64px); font-weight: 900; }
+  .lead { color: var(--muted); font-size: 18px; }
+  dl { display: grid; gap: 4px; margin: 12px 0 0; }
+  dt { font: 500 12px/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 12px; }
+  dd { margin: 0; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+</style>
