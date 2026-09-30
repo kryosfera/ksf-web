@@ -23,6 +23,14 @@ describe('redirecciones', () => {
     expect(iExact).toBeGreaterThanOrEqual(0);
     expect(iExact).toBeLessThan(iSplat);
   });
+  it.each(['/clientes', '/organizaciones', '/provincia', '/informes', '/post'])('redirige la ruta base %s (con y sin barra) a /nosotros antes que su comodín', (base) => {
+    const i = lines.indexOf(`${base} /nosotros 301`);
+    const iBarra = lines.indexOf(`${base}/ /nosotros 301`);
+    const iSplat = lines.findIndex((l) => l.startsWith(`${base}/* `));
+    expect(i).toBeGreaterThanOrEqual(0);
+    expect(iBarra).toBeGreaterThanOrEqual(0);
+    expect(iSplat).toBeGreaterThan(Math.max(i, iBarra));
+  });
   it('no redirige ninguna ruta a sí misma', () => {
     for (const [from, to] of REDIRECTS) expect(from).not.toBe(to);
   });

@@ -19,6 +19,12 @@ export const REDIRECTS = [
   ['/home-4', '/'],
   ['/home-5', '/'],
   ['/401', '/'],
+  // Rutas base de las colecciones de Webflow (plantillas, sin página propia).
+  ['/clientes', '/nosotros'],
+  ['/organizaciones', '/nosotros'],
+  ['/provincia', '/nosotros'],
+  ['/informes', '/nosotros'],
+  ['/post', '/nosotros'],
   ['/clientes/*', '/nosotros'],
   ['/organizaciones/*', '/nosotros'],
   ['/webinars/*', '/servicios/streaming-y-webinars'],
