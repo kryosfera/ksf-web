@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ClientMarquee from '../components/ClientMarquee.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import equipoCompleto from '../data/equipo.json';
+// Equipo vigente publicado: solo quien tiene foto (Marta, Quim, Josep, Mauro, Nor y Paula).
+const equipo = equipoCompleto.filter((p) => p.foto);
+const clientes = (await getCollection('clientes')).map((c) => c.data);
+const orgs = (await getCollection('organizaciones')).map((o) => o.data);
+const fotos = import.meta.glob<{ default: ImageMetadata }>('../assets/equipo/*', { eager: true });
+const ecosistema = [
+  { t: 'ESADE Business School', d: 'Vínculo institucional con INGINIUM para la oferta formativa: profesorado y autoría de calidad.' },
+  { t: 'Sociedades científicas', d: 'Colaboración recurrente con SEGHNP, SENEFRO, GETECCU, SEOR y otras sociedades médicas.' },
+  { t: 'Zoom Events', d: 'Plataforma operada por KSF para streaming, webinars y reuniones multisede.' },
+  { t: 'Plataformas LMS', d: 'Cursos online sobre LMS propio o del cliente, con seguimiento y certificación.' },
+  { t: 'Red de partners internacionales', d: 'Stands, escenografía inmersiva, instalaciones de vídeo e IA aplicada a eventos.' },
+];
+---
+<BaseLayout title="Nosotros · KSF Digital Healthcare" description="Una agencia especializada en el sector salud: un partner integral para transformar tus retos en soluciones." mode="claro">
+  <section class="wrap head">
+    <span class="eyebrow">Quiénes somos</span>
+    <h1 data-split>Una agencia especializada en el sector salud</h1>
+    <p class="lead">Un partner integral para transformar tus retos en soluciones. Nuestro objetivo es que potencies tu negocio con la seguridad de tenerlo todo cubierto y sin preocupaciones.</p>
+    <p class="quote">Nos gusta escuchar tus metas y ejecutar los detalles para que puedas conectar con tu público.</p>
+  </section>
+  <section class="wrap block" aria-labelledby="eq-h">
+    <h2 id="eq-h" data-split>Equipo</h2>
+    <ul class="team">{equipo.map((p) => (
+      <li data-reveal>
+        {p.foto && fotos[`../assets/equipo/${p.foto}`]
+          ? <Image src={fotos[`../assets/equipo/${p.foto}`].default} alt={p.nombre} width={200} height={200} />
+          : <span class="ini" aria-hidden="true">{p.nombre.slice(0, 1)}</span>}
+        <b>{p.nombre}</b><small>{p.rol}</small>
+      </li>))}
+    </ul>
+  </section>
+  <section class="wrap block" id="clientes" aria-labelledby="cl-h">
+    <h2 id="cl-h" data-split>Clientes</h2>
+    <p class="lead">Laboratorios y compañías de salud que trabajan con KSF de forma recurrente.</p>
+    <ClientMarquee items={clientes} label="Logos de clientes" />
+    <h3 class="eyebrow">Sociedades científicas y organizaciones</h3>
+    <ul class="orgs">{orgs.map((o) => <li>{o.nombre}</li>)}</ul>
+  </section>
+  <section class="wrap block" aria-labelledby="eco-h">
+    <h2 id="eco-h" data-split>Un ecosistema para llegar más lejos</h2>
+    <ol class="eco">{ecosistema.map((e, i) => <li data-reveal><em>{String(i + 1).padStart(2, '0')}</em><h3>{e.t}</h3><p>{e.d}</p></li>)}</ol>
+  </section>
+  <section class="wrap block"><p class="addr">KSF Digital Healthcare · Nicaragua 106, 08029 Barcelona · <a href="mailto:info@ksf.es">info@ksf.es</a></p></section>
+  <ContactCTA />
+</BaseLayout>
+<style>
+  .head { padding-block: 72px 24px; display: grid; gap: 16px; }
+  h1 { font-size: clamp(40px, 5.6vw, 84px); font-weight: 900; max-width: 15ch; }
+  .lead { color: var(--muted); max-width: 60ch; font-size: 19px; }
+  .quote { font: italic 500 20px/1.5 var(--f-body); max-width: 50ch; border-left: 3px solid; border-image: var(--grad) 1; padding-left: 16px; }
+  .block { padding-block: 64px; display: grid; gap: 16px; }
+  h2 { font-size: clamp(30px, 3.4vw, 48px); }
+  .team { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 24px; }
+  .team li { display: grid; gap: 4px; justify-items: start; }
+  .team :global(img), .ini { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; }
+  .ini { display: grid; place-items: center; background: var(--grad); color: #06121A; font: 900 40px/1 var(--f-display); }
+  .team small { color: var(--muted); }
+  .orgs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 24px; color: var(--muted); }
+  .eco { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+  .eco li { display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 14px; }
+  .eco em { font: 500 12px/1 var(--f-mono); font-style: normal; color: var(--accent-text); }
+  .eco h3 { font-size: 20px; } .eco p { color: var(--muted); font-size: 15px; }
+  .addr { color: var(--muted); }
+</style>
