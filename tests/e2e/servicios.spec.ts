@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 const SERVICIOS: Array<[string, 'oscuro' | 'claro', string]> = [
   ['formacion', 'claro', 'Formación'], ['produccion-audiovisual', 'oscuro', 'Producción audiovisual'],
@@ -28,3 +29,13 @@ test('Formación enlaza a Inginium', async ({ page }) => {
   await page.goto('/servicios/formacion');
   await expect(page.locator('a[href="https://www.inginium-ksf.com"]')).toBeAttached();
 });
+
+for (const slug of ['formacion', 'streaming-y-webinars']) {
+  test(`/servicios/${slug}: contraste de color (axe)`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`/servicios/${slug}`);
+    await page.waitForTimeout(500);
+    const r = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze();
+    expect(r.violations.map((v) => v.nodes.map((n) => n.html + ' ' + n.any.map((a) => a.message).join('|')))).toEqual([]);
+  });
+}
