@@ -2,7 +2,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { onPage } from './lifecycle';
-import { countUp } from './counters';
+import { countUp, killCounters } from './counters';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -36,7 +36,7 @@ onPage(() => {
         offs.push(() => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerleave', leave); });
       });
     }
-    return () => offs.forEach((f) => f());
+    return () => { offs.forEach((f) => f()); killCounters([...document.querySelectorAll<HTMLElement>('.num')]); };
   });
   return () => mm.revert();
 });

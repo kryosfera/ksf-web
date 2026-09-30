@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { shotIndexAt, progressInShot } from '../lib/reel';
-import { countUp } from './counters';
+import { countUp, killCounters } from './counters';
 import { onPage } from './lifecycle';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -19,6 +19,7 @@ export function initHeroReel(root: HTMLElement): () => void {
   const d = root.querySelector<HTMLElement>('[data-l3-d]')!;
   const bar = root.querySelector<HTMLElement>('[data-l3-bar]')!;
   const tc = root.querySelector<HTMLElement>('[data-tc]')!;
+  const l3 = root.querySelector<HTMLElement>('.l3')!;
   const pause = root.querySelector<HTMLButtonElement>('[data-pause]')!;
   const svc = [...root.querySelectorAll<HTMLElement>('[data-svc]')];
   const nums = [...root.querySelectorAll<HTMLElement>('.num')];
@@ -34,7 +35,11 @@ export function initHeroReel(root: HTMLElement): () => void {
   if (video) {
     on(video, 'error', dropVideo);
     video.querySelectorAll('source').forEach((s) => on(s as unknown as HTMLElement, 'error', dropVideo));
+    // Si el fallo ocurrió antes de enganchar los listeners, no habrá evento: se comprueba el estado.
+    if (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) dropVideo();
   }
+  // Anuncio a lectores de pantalla solo cuando el cambio lo provoca la persona.
+  const live = (v: 'off' | 'polite') => l3.setAttribute('aria-live', v);
   const videoReady = () => !!video && !video.error && video.readyState >= 2;
   const now = () => (videoReady() ? video!.currentTime : clock);
 
@@ -73,6 +78,7 @@ export function initHeroReel(root: HTMLElement): () => void {
   };
 
   function jump(i: number) {
+    live('polite');
     clock = starts[i];
     if (videoReady()) video!.currentTime = starts[i];
     show(i);
@@ -92,18 +98,19 @@ export function initHeroReel(root: HTMLElement): () => void {
     playing = !playing;
     pause.textContent = playing ? '❚❚ Pausa' : '▶ Reproducir';
     pause.setAttribute('aria-pressed', String(!playing));
+    live(playing ? 'off' : 'polite');
     if (videoReady()) (playing ? video!.play() : video!.pause());
   });
 
   const mm = gsap.matchMedia();
   mm.add('(prefers-reduced-motion: no-preference)', () => {
-    motion = true; playing = true;
+    motion = true; playing = true; live('off');
     gsap.from(root.querySelectorAll('.claim .line > span'), { yPercent: 115, duration: 1.1, stagger: 0.1, ease: 'expo.out', delay: 0.2 });
     gsap.from(root.querySelectorAll('.sub, .cta > *, .l3, .prog'), { y: 14, autoAlpha: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out', delay: 0.7 });
     return () => { motion = false; };
   });
   mm.add('(prefers-reduced-motion: reduce)', () => {
-    playing = false; pause.hidden = true; video?.pause();
+    playing = false; live('polite'); pause.hidden = true; video?.pause();
   });
   mm.add('(min-width: 761px) and (prefers-reduced-motion: no-preference)', () => {
     root.classList.add('is-pinned');
@@ -130,7 +137,7 @@ export function initHeroReel(root: HTMLElement): () => void {
 
   show(0);
   gsap.ticker.add(tick);
-  return () => { gsap.ticker.remove(tick); mm.revert(); offs.forEach((f) => f()); };
+  return () => { gsap.ticker.remove(tick); killCounters(nums); mm.revert(); offs.forEach((f) => f()); };
 }
 
 onPage(() => {

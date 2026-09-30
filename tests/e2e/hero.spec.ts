@@ -35,6 +35,7 @@ test('reel con vídeo roto cae a fotos', async ({ page }) => {
     await route.fulfill({ response: res, body });
   });
   await page.goto('/');
+  await expect(page.locator('video[data-reel-video]')).toHaveCount(0);
   await expect(page.locator('[data-shot].is-on img')).toBeVisible();
   await expect(page.locator(L3)).not.toHaveText('Desde plató', { timeout: 9000 });
 });
@@ -65,4 +66,14 @@ test('en móvil no se fija', async ({ page }, info) => {
   test.skip(info.project.name !== 'mobile', 'solo móvil');
   await page.goto('/');
   await expect(page.locator('[data-hero-reel]')).not.toHaveClass(/is-pinned/);
+});
+
+test('el enlace «Saltar al contenido» se ve al enfocarlo', async ({ page }) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  const skip = page.locator('a[href="#contenido"]');
+  await expect(skip).toBeFocused();
+  const box = await skip.boundingBox();
+  expect(box!.width).toBeGreaterThan(1);
+  expect(box!.height).toBeGreaterThan(1);
 });
