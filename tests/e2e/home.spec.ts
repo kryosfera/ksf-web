@@ -57,21 +57,17 @@ test.describe('movimiento reducido', () => {
   });
 });
 
-test('la marquesina se pausa con su botón y al enfocarlo', async ({ page }) => {
+test('la marquesina se pausa y se reanuda con su botón', async ({ page }) => {
   await page.goto('/');
   const track = page.locator('.marquee .track').first();
   const btn = page.locator('[data-marquee-pause]').first();
   await expect(btn).toHaveAccessibleName('Pausar logos');
   await expect(track).toHaveCSS('animation-play-state', 'running');
-  await btn.focus();
-  await expect(track).toHaveCSS('animation-play-state', 'paused');
   await btn.click();
   await expect(btn).toHaveAttribute('aria-pressed', 'true');
-  await btn.blur();
   await page.mouse.move(0, 0);
   await expect(track).toHaveCSS('animation-play-state', 'paused');
   await btn.click();
   await expect(btn).toHaveAttribute('aria-pressed', 'false');
-  await btn.blur();
   await expect(track).toHaveCSS('animation-play-state', 'running');
 });

@@ -30,7 +30,7 @@ const { items, label } = Astro.props;
   .mq { display: grid; gap: 6px; }
   .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
   .track { display: flex; width: max-content; list-style: none; margin: 0; padding: 12px 0; animation: marquee 60s linear infinite; }
-  .marquee:hover .track, .mq:focus-within .track, .mq.is-paused .track { animation-play-state: paused; }
+  .marquee:hover .track, .mq.is-paused .track { animation-play-state: paused; }
   .mq-pause { justify-self: end; border: 1px solid var(--line); background: none; color: var(--muted); border-radius: 999px; padding: 6px 11px; font: 600 12px/1 var(--f-body); cursor: pointer; }
   .mq-pause:hover, .mq-pause:focus-visible { color: var(--fg); }
   .mq-pause[aria-pressed="true"] { border-color: currentColor; }
