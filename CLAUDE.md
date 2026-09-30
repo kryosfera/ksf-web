@@ -39,6 +39,7 @@ Tras cualquier cambio: `npm test && npm run build && npm run test:e2e` (los test
   - `public/_headers` con cabeceras de seguridad.
   - Tests de referencias cruzadas.
 - **En GitHub:** `kryosfera/ksf-web`, rama `main` (subido el 30/09/2026). Falta conectarlo a Cloudflare Pages (tarea 11).
+- **Tarea 11 · servicios externos:** Resend con el dominio `ksf.es` y sus DNS configurados por Joaquín (30/09; no verificado desde el contenedor, que no resuelve DNS externos). Faltan la API key de envío, el widget de Turnstile, el proyecto de Pages y `nueva.ksf.es`.
 - **Variables de entorno de Cloudflare Pages** (Production y Preview):
   - `PUBLIC_TURNSTILE_SITEKEY` es de **build**. Sin ella el formulario falla en producción.
   - `TURNSTILE_SECRET` y `RESEND_API_KEY` van como secretos.
