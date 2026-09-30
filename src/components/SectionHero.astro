@@ -1,12 +1,12 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import KLogo from './KLogo.astro';
 interface Props { numero: number; titulo: string; entradilla: string; nuevo?: boolean; imagen?: ImageMetadata; kicker?: string }
 const { numero, titulo, entradilla, nuevo = false, imagen, kicker } = Astro.props;
 ---
 <section class="shero">
   {imagen
-    ? <div class="bg"><Image src={imagen} alt="" widths={[960, 1600, 2400]} sizes="100vw" format="avif" quality={60} loading="eager" /></div>
+    ? <div class="bg"><Picture src={imagen} alt="" formats={['avif', 'webp']} fallbackFormat="webp" widths={[960, 1600, 2400]} sizes="100vw" quality={60} loading="eager" /></div>
     : <div class="bg pattern" aria-hidden="true"><KLogo size={520} id={`sh${numero}`} /></div>}
   <div class="shade" aria-hidden="true"></div>
   <div class="wrap inner">

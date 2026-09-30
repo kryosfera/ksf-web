@@ -82,6 +82,12 @@ test.describe('sin JavaScript', () => {
     await expect(page.locator('[data-svc]')).toHaveCount(9);
     await expect(page.getByText('2.266').first()).toBeVisible();
   });
+  test('la primera foto del reel se ve sin JavaScript', async ({ page }) => {
+    await page.goto('/');
+    const img = page.locator('[data-shot]').first().locator('img');
+    await expect(img).toBeVisible();
+    await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+  });
   test('/contacto muestra el formulario y /servicios/formacion su contenido', async ({ page }) => {
     await page.goto('/contacto');
     await expect(page.locator('form')).toBeVisible();

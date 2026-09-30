@@ -1,4 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { test, expect, type Page } from '@playwright/test';
+
+const reel = JSON.parse(readFileSync('src/data/reel.json', 'utf8')) as { shots: Array<{ imagen: string }> };
+const NOMBRES = reel.shots.map((s) => s.imagen.replace(/\.[^.]+$/, ''));
+/** Registra las imágenes del reel (/_astro/<nombre>.*) que pide la página. */
+function contarReel(page: Page): string[] {
+  const pedidas: string[] = [];
+  page.on('request', (r) => {
+    const p = new URL(r.url()).pathname;
+    if (p.startsWith('/_astro/') && NOMBRES.some((n) => p.startsWith(`/_astro/${n}.`))) pedidas.push(p);
+  });
+  return pedidas;
+}
 
 const L3 = '[data-hero-reel] [data-l3-t]';
 
@@ -76,4 +89,38 @@ test('el enlace «Saltar al contenido» se ve al enfocarlo', async ({ page }) =>
   const box = await skip.boundingBox();
   expect(box!.width).toBeGreaterThan(1);
   expect(box!.height).toBeGreaterThan(1);
+});
+
+test('en la carga inicial solo se pide la primera foto del reel', async ({ page }) => {
+  const pedidas = contarReel(page);
+  await page.goto('/', { waitUntil: 'load' });
+  await expect(page.locator('[data-shot]').first().locator('img')).toHaveJSProperty('complete', true);
+  expect(pedidas.length).toBe(1);
+  expect(pedidas[0]).toMatch(/^\/_astro\/plato\./);
+});
+
+test('cada plano tiene su foto cargada al mostrarse', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('[data-seg]').nth(6).click();
+  await expect(page.locator(L3)).toHaveText('Reuniones científicas');
+  const img = page.locator('[data-shot]').nth(6).locator('img');
+  await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+  // Y el plano siguiente al que está en pantalla también se precarga mientras avanza el reel.
+  await page.goto('/');
+  await expect(page.locator(L3)).not.toHaveText('Desde plató', { timeout: 9000 });
+  const segunda = page.locator('[data-shot]').nth(1).locator('img');
+  await expect.poll(() => segunda.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+});
+
+test('las fotos del reel ofrecen AVIF y WebP, con respaldo de 960 px', async ({ page }) => {
+  await page.goto('/');
+  const fig = page.locator('[data-shot]').first();
+  await expect(fig.locator('source[type="image/avif"]')).toHaveCount(1);
+  await expect(fig.locator('source[type="image/webp"]')).toHaveCount(1);
+  expect(await fig.locator('img').getAttribute('src')).toMatch(/\.webp$/);
+  const w = await page.request.get((await fig.locator('img').getAttribute('src'))!);
+  expect((await w.body()).length).toBeLessThan(200_000);
+  await page.goto('/servicios/formacion');
+  await expect(page.locator('.shero source[type="image/avif"]')).toHaveCount(1);
+  await expect(page.locator('.shero source[type="image/webp"]')).toHaveCount(1);
 });

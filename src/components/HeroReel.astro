@@ -7,10 +7,13 @@ import StatCounters from './StatCounters.astro';
 
 const files = import.meta.glob<{ default: ImageMetadata }>('../assets/reel/*', { eager: true });
 const byName = (n: string) => files[`../assets/reel/${n}`].default;
-const shots = await Promise.all(reel.shots.map(async (s, i) => ({
-  ...s,
-  img: await getImage({ src: byName(s.imagen), widths: [960, 1600, 2400], sizes: '100vw', format: 'avif', quality: 60, loading: i === 0 ? 'eager' : 'lazy' }),
-})));
+// AVIF con WebP de respaldo; el <img> lleva el WebP de 960 px para navegadores sin <picture>/AVIF.
+const variante = (src: ImageMetadata, format: 'avif' | 'webp') => getImage({ src, widths: [960, 1600, 2400], sizes: '100vw', format, quality: 60 });
+const shots = await Promise.all(reel.shots.map(async (s) => {
+  const src = byName(s.imagen);
+  const [avif, webp, respaldo] = await Promise.all([variante(src, 'avif'), variante(src, 'webp'), getImage({ src, width: 960, format: 'webp', quality: 60 })]);
+  return { ...s, avif: avif.srcSet.attribute, webp: webp.srcSet.attribute, src: respaldo.src };
+}));
 const servicios = (await getCollection('servicios')).sort((a, b) => a.data.numero - b.data.numero);
 const shotServices = new Set(reel.shots.map((s) => s.servicio));
 const first = reel.shots[0];
@@ -19,9 +22,23 @@ const first = reel.shots[0];
   <script type="application/json" data-reel set:html={JSON.stringify({ total: reel.total, shots: reel.shots })} />
   <div class="screen">
     <div class="reel">
-      {shots.map((s, i) => (
-        <figure class:list={['clip', { 'is-on': i === 0 }]} data-shot>
-          <img src={s.img.src} srcset={s.img.srcSet.attribute} sizes="100vw" alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} decoding="async" />
+      {/* Solo el primer plano se descarga al cargar; el resto lleva data-src/data-srcset y
+          hero-reel.ts los promueve justo antes de mostrarlos (o al saltar a ellos). */}
+      {shots.map((s, i) => i === 0 ? (
+        <figure class="clip is-on" data-shot>
+          <picture>
+            <source type="image/avif" srcset={s.avif} sizes="100vw" />
+            <source type="image/webp" srcset={s.webp} sizes="100vw" />
+            <img src={s.src} alt={s.alt} loading="eager" fetchpriority="high" decoding="async" />
+          </picture>
+        </figure>
+      ) : (
+        <figure class="clip" data-shot>
+          <picture>
+            <source type="image/avif" data-srcset={s.avif} sizes="100vw" />
+            <source type="image/webp" data-srcset={s.webp} sizes="100vw" />
+            <img data-src={s.src} alt={s.alt} decoding="async" />
+          </picture>
         </figure>
       ))}
       {reel.video.mp4 ? (
@@ -80,6 +97,7 @@ const first = reel.shots[0];
   .reel { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: #0A1118; }
   .clip { position: absolute; inset: 0; opacity: 0; visibility: hidden; margin: 0; }
   .clip.is-on { opacity: 1; visibility: visible; }
+  .clip picture { display: block; width: 100%; height: 100%; }
   .clip img { width: 100%; height: 100%; max-width: none; object-fit: cover; display: block; will-change: transform; transform-origin: 50% 50%; }
   video[data-reel-video] { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
   .shade { position: absolute; inset: 0; z-index: 1; pointer-events: none;

@@ -43,7 +43,18 @@ export function initHeroReel(root: HTMLElement): () => void {
   const videoReady = () => !!video && !video.error && video.readyState >= 2;
   const now = () => (videoReady() ? video!.currentTime : clock);
 
+  /** Promueve data-srcset/data-src a srcset/src para que el navegador descargue el plano i. */
+  const load = (i: number) => {
+    const fig = layers[i]; if (!fig) return;
+    fig.querySelectorAll<HTMLSourceElement | HTMLImageElement>('[data-srcset], [data-src]').forEach((el) => {
+      if (el.dataset.srcset) { el.setAttribute('srcset', el.dataset.srcset); delete el.dataset.srcset; }
+      if (el.dataset.src) { el.setAttribute('src', el.dataset.src); delete el.dataset.src; }
+    });
+  };
+  const firstImg = layers[0]?.querySelector('img');
+
   function show(i: number) {
+    load(i);
     const prev = current; current = i;
     const s = data.shots[i];
     segs.forEach((sg, j) => sg.classList.toggle('done', j < i));
@@ -74,6 +85,10 @@ export function initHeroReel(root: HTMLElement): () => void {
     const tt = now();
     const i = shotIndexAt(starts, tt, data.total);
     if (i !== current) show(i);
+    // Precarga del plano siguiente cuando el actual lleva un rato en pantalla y la primera foto ya está.
+    const elapsed = ((tt - starts[i]) % data.total + data.total) % data.total;
+    const len = (i + 1 < starts.length ? starts[i + 1] : data.total) - starts[i];
+    if (elapsed >= Math.min(2, len / 2) && (!firstImg || firstImg.complete)) load((i + 1) % layers.length);
     gsap.set(fills[i], { scaleX: progressInShot(starts, tt, data.total) });
   };
 
