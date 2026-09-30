@@ -8,7 +8,7 @@ const { p } = Astro.props;
   <p>{p.descripcion}</p>
   <p class="who"><b>Para:</b> {p.publico}</p>
   {p.url
-    ? <a class="btn btn-secondary" href={p.url} target="_blank" rel="noopener">Ir a la plataforma <span aria-hidden="true">↗</span></a>
+    ? <a class="btn btn-secondary" href={p.url} target="_blank" rel="noopener noreferrer">Ir a la plataforma <span aria-hidden="true">↗</span></a>
     : <a class="btn btn-secondary" href={`/contacto?servicio=${p.servicio}`}>Pide una demo</a>}
 </article>
 <style>

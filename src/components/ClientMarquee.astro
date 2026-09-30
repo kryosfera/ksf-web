@@ -14,16 +14,16 @@ const { items, label } = Astro.props;
 </div>
 <style>
   .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
-  .track { display: flex; gap: 56px; width: max-content; list-style: none; margin: 0; padding: 12px 0; animation: marquee 60s linear infinite; }
+  .track { display: flex; width: max-content; list-style: none; margin: 0; padding: 12px 0; animation: marquee 60s linear infinite; }
   .marquee:hover .track { animation-play-state: paused; }
-  li { display: flex; align-items: center; height: 48px; white-space: nowrap; }
+  li { display: flex; align-items: center; height: 48px; white-space: nowrap; padding-right: 56px; }
   img { height: 40px; width: auto; max-width: 160px; object-fit: contain; filter: grayscale(1) brightness(1.6); opacity: .8; }
   :global([data-mode="claro"]) img { filter: grayscale(1); }
   span { font: 800 18px/1 var(--f-display); letter-spacing: .02em; color: var(--muted); }
   @keyframes marquee { to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) {
     .marquee { -webkit-mask-image: none; mask-image: none; }
-    .track { animation: none; flex-wrap: wrap; width: auto; }
+    .track { animation: none; flex-wrap: wrap; width: auto; row-gap: 12px; }
     li[aria-hidden] { display: none; }
   }
 </style>
