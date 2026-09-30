@@ -1,4 +1,10 @@
+import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
+
+// En la nube el navegador del paquete no está; se usa el Chromium preinstalado si existe.
+const chromium = existsSync('/opt/pw-browsers/chromium')
+  ? { launchOptions: { executablePath: '/opt/pw-browsers/chromium' } }
+  : {};
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -11,7 +17,7 @@ export default defineConfig({
   },
   use: { baseURL: 'http://localhost:4321' },
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 }, launchOptions: { executablePath: '/opt/pw-browsers/chromium' } } },
-    { name: 'mobile', use: { ...devices['Pixel 7'], launchOptions: { executablePath: '/opt/pw-browsers/chromium' } } },
+    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 }, ...chromium } },
+    { name: 'mobile', use: { ...devices['Pixel 7'], ...chromium } },
   ],
 });
