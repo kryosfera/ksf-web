@@ -1,0 +1,8 @@
+# Cabeceras de seguridad para todas las rutas (Cloudflare Pages).
+# Sin Content-Security-Policy por ahora: habría que permitir Turnstile, Cloudflare Web Analytics
+# y los estilos/scripts en línea de Astro; queda anotado como pendiente en CLAUDE.md.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
