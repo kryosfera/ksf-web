@@ -2,6 +2,7 @@
 numero: 7
 titulo: Diseño gráfico de materiales
 modo: claro
+imagen: diseno-rollup.jpeg
 entradilla: Transformamos la información médica en piezas visuales atractivas, claras y totalmente adaptadas a la normativa del sector sanitario.
 seo: { titulo: "Diseño gráfico para salud · KSF Digital Healthcare", descripcion: "Infografías científicas, materiales para eventos y branding de espacios, libros, brochures y material para pacientes." }
 subservicios:

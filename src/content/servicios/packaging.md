@@ -2,6 +2,7 @@
 numero: 8
 titulo: Packaging
 modo: claro
+imagen: stand-palex.jpeg
 entradilla: Diseño, protección y presentación de dispositivos que lo convierten en una experiencia de marca.
 seo: { titulo: "Packaging de dispositivos médicos · KSF Digital Healthcare", descripcion: "Cajas, estuches y coberturas para dispositivos médicos y welcome packs para eventos." }
 subservicios:

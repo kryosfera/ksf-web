@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHero from '../components/SectionHero.astro';
+import heroImg from '../assets/reel/equipo-ksf.jpeg';
 import ClientMarquee from '../components/ClientMarquee.astro';
 import ContactCTA from '../components/ContactCTA.astro';
 import equipoCompleto from '../data/equipo.json';
@@ -19,12 +21,9 @@ const ecosistema = [
 ];
 ---
 <BaseLayout title="Nosotros · KSF Digital Healthcare" description="Una agencia especializada en el sector salud: un partner integral para transformar tus retos en soluciones." mode="claro">
-  <section class="wrap head">
-    <span class="eyebrow">Quiénes somos</span>
-    <h1 data-split>Una agencia especializada en el sector salud</h1>
-    <p class="lead">Un partner integral para transformar tus retos en soluciones. Nuestro objetivo es que potencies tu negocio con la seguridad de tenerlo todo cubierto y sin preocupaciones.</p>
+  <SectionHero kicker="Quiénes somos" titulo="Una agencia especializada en el sector salud" entradilla="Un partner integral para transformar tus retos en soluciones. Nuestro objetivo es que potencies tu negocio con la seguridad de tenerlo todo cubierto y sin preocupaciones." imagen={heroImg}>
     <p class="quote">Nos gusta escuchar tus metas y ejecutar los detalles para que puedas conectar con tu público.</p>
-  </section>
+  </SectionHero>
   <section class="wrap block" aria-labelledby="eq-h">
     <h2 id="eq-h" data-split>Equipo</h2>
     <ul class="team">{equipo.map((p) => (

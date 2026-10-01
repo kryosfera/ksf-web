@@ -2,6 +2,7 @@
 numero: 9
 titulo: Piezas de anatomía
 modo: claro
+imagen: anatomia-ponencia.jpeg
 entradilla: "Modelos anatómicos que hacen tangible la ciencia: para formación, visita médica y congresos, personalizados con tu marca."
 seo: { titulo: "Modelos anatómicos personalizados · KSF Digital Healthcare", descripcion: "Modelos de anatomía desmontables para formación, visita médica y congresos, personalizados con tu marca." }
 subservicios:

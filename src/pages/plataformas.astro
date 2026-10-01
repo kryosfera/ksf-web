@@ -1,16 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHero from '../components/SectionHero.astro';
+import heroImg from '../assets/reel/edicion-croma.jpeg';
 import PlatformCard from '../components/PlatformCard.astro';
 import ContactCTA from '../components/ContactCTA.astro';
 const plataformas = (await getCollection('plataformas')).map((p) => p.data);
 ---
 <BaseLayout title="Plataformas digitales · KSF Digital Healthcare" description="Portal de formación Inginium, casos clínicos virtuales, juegos de gamificación clínica, asistente de IA para eventos y recetario digital." mode="claro">
-  <section class="wrap head">
-    <span class="eyebrow">Plataformas KSF</span>
-    <h1 data-split>Plataformas digitales</h1>
-    <p class="lead">Productos digitales propios para formación, congresos y relación con el profesional sanitario. Accede directamente o pídenos una demo.</p>
-  </section>
+  <SectionHero kicker="Plataformas KSF" titulo="Plataformas digitales" entradilla="Productos digitales propios para formación, congresos y relación con el profesional sanitario. Accede directamente o pídenos una demo." imagen={heroImg} />
   <section class="wrap cards">{plataformas.map((p) => <PlatformCard p={p} />)}</section>
   <ContactCTA servicio="interactivos" />
 </BaseLayout>

@@ -1,14 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHero from '../../components/SectionHero.astro';
+import heroImg from '../../assets/reel/montaje-congreso.jpeg';
 import ContactCTA from '../../components/ContactCTA.astro';
 const servicios = (await getCollection('servicios')).sort((a, b) => a.data.numero - b.data.numero);
 ---
 <BaseLayout title="Servicios · KSF Digital Healthcare" description="Un solo equipo, nueve líneas de servicio: formación, producción audiovisual, streaming, eventos, congresos, interactivos, diseño gráfico, packaging y piezas de anatomía." mode="claro">
-  <section class="wrap head">
-    <span class="eyebrow">Servicios</span>
-    <h1 data-split>Un solo equipo. Nueve líneas de servicio.</h1>
-  </section>
+  <SectionHero kicker="Servicios" titulo="Un solo equipo. Nueve líneas de servicio." imagen={heroImg} />
   <section class="wrap grid">
     {servicios.map((s) => (
       <a class="svc-card" href={`/servicios/${s.id}`} data-reveal>

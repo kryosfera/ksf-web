@@ -1,10 +1,11 @@
 ---
 import { Picture } from 'astro:assets';
 import KLogo from './KLogo.astro';
-interface Props { numero: number; titulo: string; entradilla: string; nuevo?: boolean; imagen?: ImageMetadata; kicker?: string }
-const { numero, titulo, entradilla, nuevo = false, imagen, kicker } = Astro.props;
+// La cabecera es siempre escénica (modo oscuro con foto del proyecto), también en las páginas claras.
+interface Props { numero?: number; titulo: string; entradilla?: string; nuevo?: boolean; imagen?: ImageMetadata; kicker?: string }
+const { numero = 0, titulo, entradilla, nuevo = false, imagen, kicker } = Astro.props;
 ---
-<section class="shero">
+<section class="shero" data-mode="oscuro">
   {imagen
     ? <div class="bg"><Picture src={imagen} alt="" formats={['avif', 'webp']} fallbackFormat="webp" widths={[960, 1600, 2400]} sizes="100vw" quality={60} loading="eager" /></div>
     : <div class="bg pattern" aria-hidden="true"><KLogo size={520} id={`sh${numero}`} /></div>}
@@ -12,17 +13,17 @@ const { numero, titulo, entradilla, nuevo = false, imagen, kicker } = Astro.prop
   <div class="wrap inner">
     <span class="eyebrow">{kicker ?? `${String(numero).padStart(2, '0')} · Lo que hacemos`}{nuevo && <span class="tagnew">NUEVO 2026</span>}</span>
     <h1 data-split>{titulo}</h1>
-    <p class="lead">{entradilla}</p>
+    {entradilla && <p class="lead">{entradilla}</p>}
+    <slot />
   </div>
 </section>
 <style>
-  .shero { position: relative; overflow: hidden; isolation: isolate; padding-block: clamp(120px, 18vh, 200px) clamp(56px, 8vh, 96px); }
+  .shero { background: var(--bg); color: var(--fg); position: relative; overflow: hidden; isolation: isolate; padding-block: clamp(120px, 18vh, 200px) clamp(56px, 8vh, 96px); }
   .bg { position: absolute; inset: 0; z-index: -2; }
   .bg :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .pattern { display: grid; place-items: center end; padding-right: 5%; opacity: .18; }
   .shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 82%, transparent) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 40%, color-mix(in srgb, var(--bg) 35%, transparent) 100%), linear-gradient(180deg, color-mix(in srgb, var(--bg) 30%, transparent), var(--bg) 96%); }
   .inner { display: grid; gap: 16px; }
-  :global([data-mode="claro"]) .shero .eyebrow { color: var(--fg); }
   h1 { font-size: clamp(44px, 6.4vw, 96px); font-weight: 900; max-width: 14ch; }
   .lead { font-size: clamp(18px, 1.5vw, 21px); max-width: 52ch; color: var(--fg); opacity: .9; }
   .tagnew { margin-left: 10px; font: 600 10px/1 var(--f-mono); color: #06121A; background: var(--mint); padding: 4px 6px; border-radius: 5px; }
