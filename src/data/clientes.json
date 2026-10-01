@@ -3,127 +3,127 @@
     "id": "abbott",
     "nombre": "Abbott",
     "web": null,
-    "logo": null
+    "logo": "/clientes/abbott.png"
   },
   {
     "id": "abbvie",
     "nombre": "Abbvie",
     "web": null,
-    "logo": null
+    "logo": "/clientes/abbvie.png"
   },
   {
     "id": "aboca",
     "nombre": "ABOCA",
     "web": null,
-    "logo": null
+    "logo": "/clientes/aboca.png"
   },
   {
     "id": "adacyte",
     "nombre": "Adacyte",
     "web": null,
-    "logo": null
+    "logo": "/clientes/adacyte.png"
   },
   {
     "id": "alfasigma",
     "nombre": "Alfasigma",
     "web": null,
-    "logo": null
+    "logo": "/clientes/alfasigma.png"
   },
   {
     "id": "allergy-therapeutics",
     "nombre": "Allergy Therapeutics",
     "web": null,
-    "logo": null
+    "logo": "/clientes/allergy-therapeutics.png"
   },
   {
     "id": "angelini-pharma",
     "nombre": "Angelini Pharma",
     "web": null,
-    "logo": null
+    "logo": "/clientes/angelini-pharma.png"
   },
   {
     "id": "brill-pharma",
     "nombre": "Brill Pharma",
     "web": null,
-    "logo": null
+    "logo": "/clientes/brill-pharma.png"
   },
   {
     "id": "bristol-myers-squibb",
     "nombre": "Bristol Myers Squibb",
     "web": null,
-    "logo": null
+    "logo": "/clientes/bristol-myers-squibb.png"
   },
   {
     "id": "caire",
     "nombre": "Caire",
     "web": null,
-    "logo": null
+    "logo": "/clientes/caire.png"
   },
   {
     "id": "drfalk",
     "nombre": "DrFalk",
     "web": null,
-    "logo": null
+    "logo": "/clientes/drfalk.svg"
   },
   {
     "id": "esteve",
     "nombre": "Esteve",
     "web": "https://www.esteve.com/",
-    "logo": null
+    "logo": "/clientes/esteve.png"
   },
   {
     "id": "faes-farma",
     "nombre": "Faes Farma",
     "web": null,
-    "logo": null
+    "logo": "/clientes/faes-farma.png"
   },
   {
     "id": "ferrer",
     "nombre": "Ferrer",
     "web": null,
-    "logo": null
+    "logo": "/clientes/ferrer.png"
   },
   {
     "id": "ferring",
     "nombre": "Ferring",
     "web": null,
-    "logo": null
+    "logo": "/clientes/ferring.jpg"
   },
   {
     "id": "fresenius-kabi",
     "nombre": "Fresenius Kabi",
     "web": null,
-    "logo": null
+    "logo": "/clientes/fresenius-kabi.png"
   },
   {
     "id": "galapagos",
     "nombre": "Galápagos",
     "web": null,
-    "logo": null
+    "logo": "/clientes/galapagos.png"
   },
   {
     "id": "ivascular",
     "nombre": "iVascular",
     "web": null,
-    "logo": null
+    "logo": "/clientes/ivascular.png"
   },
   {
     "id": "janssen",
     "nombre": "Janssen",
     "web": null,
-    "logo": null
+    "logo": "/clientes/janssen.png"
   },
   {
     "id": "kern",
     "nombre": "Kern",
     "web": null,
-    "logo": null
+    "logo": "/clientes/kern.jpg"
   },
   {
     "id": "kyowa-kirin",
     "nombre": "Kyowa Kirin",
     "web": null,
-    "logo": null
+    "logo": "/clientes/kyowa-kirin.png"
   },
   {
     "id": "laboratorios-vinas",
@@ -135,132 +135,132 @@
     "id": "lacer",
     "nombre": "Lacer",
     "web": null,
-    "logo": null
+    "logo": "/clientes/lacer.png"
   },
   {
     "id": "lactalis",
     "nombre": "Lactalis",
     "web": null,
-    "logo": null
+    "logo": "/clientes/lactalis.png"
   },
   {
     "id": "lundbeck",
     "nombre": "Lundbeck",
     "web": null,
-    "logo": null
+    "logo": "/clientes/lundbeck.png"
   },
   {
     "id": "medicina-y-mercado",
     "nombre": "Medicina y Mercado",
     "web": null,
-    "logo": null
+    "logo": "/clientes/medicina-y-mercado.png"
   },
   {
     "id": "msd",
     "nombre": "MSD",
     "web": null,
-    "logo": null
+    "logo": "/clientes/msd.png"
   },
   {
     "id": "nestle-healthscience",
     "nombre": "Nestle HealthScience",
     "web": null,
-    "logo": null
+    "logo": "/clientes/nestle-healthscience.png"
   },
   {
     "id": "norgine",
     "nombre": "Norgine",
     "web": null,
-    "logo": null
+    "logo": "/clientes/norgine.png"
   },
   {
     "id": "nucleix",
     "nombre": "Nucleix",
     "web": null,
-    "logo": null
+    "logo": "/clientes/nucleix.png"
   },
   {
     "id": "ordesa",
     "nombre": "Ordesa",
     "web": null,
-    "logo": null
+    "logo": "/clientes/ordesa.png"
   },
   {
     "id": "otsuka",
     "nombre": "Otsuka",
     "web": null,
-    "logo": null
+    "logo": "/clientes/otsuka.png"
   },
   {
     "id": "palex",
     "nombre": "Palex",
     "web": null,
-    "logo": null
+    "logo": "/clientes/palex.png"
   },
   {
     "id": "pfizer",
     "nombre": "Pfizer",
     "web": null,
-    "logo": null
+    "logo": "/clientes/pfizer.png"
   },
   {
     "id": "recordati",
     "nombre": "RECORDATI",
     "web": null,
-    "logo": null
+    "logo": "/clientes/recordati.svg"
   },
   {
     "id": "sandoz",
     "nombre": "Sandoz",
     "web": null,
-    "logo": null
+    "logo": "/clientes/sandoz.png"
   },
   {
     "id": "sanofi",
     "nombre": "Sanofi",
     "web": null,
-    "logo": null
+    "logo": "/clientes/sanofi.png"
   },
   {
     "id": "shionogi",
     "nombre": "SHIONOGI",
     "web": "https://www.shionogi.com/eu-es/es/",
-    "logo": null
+    "logo": "/clientes/shionogi.png"
   },
   {
     "id": "takeda",
     "nombre": "Takeda",
     "web": null,
-    "logo": null
+    "logo": "/clientes/takeda.png"
   },
   {
     "id": "thea",
     "nombre": "THEA",
     "web": "https://www.laboratoriosthea.com/",
-    "logo": null
+    "logo": "/clientes/thea.png"
   },
   {
     "id": "tillotts",
     "nombre": "Tillotts",
     "web": null,
-    "logo": null
+    "logo": "/clientes/tillotts.png"
   },
   {
     "id": "topcon",
     "nombre": "Topcon",
     "web": null,
-    "logo": null
+    "logo": "/clientes/topcon.png"
   },
   {
     "id": "viajes-el-corte-ingles",
     "nombre": "Viajes El Corte Inglés",
     "web": null,
-    "logo": null
+    "logo": "/clientes/viajes-el-corte-ingles.png"
   },
   {
     "id": "viajes-pacifico",
     "nombre": "Viajes Pacífico",
     "web": null,
-    "logo": null
+    "logo": "/clientes/viajes-pacifico.jpeg"
   }
 ]

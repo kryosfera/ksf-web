@@ -9,24 +9,24 @@
     "id": "geteccu",
     "nombre": "GETECCU",
     "web": "https://geteccu.org/",
-    "logo": null
+    "logo": "/clientes/geteccu.png"
   },
   {
     "id": "hospital-sant-joan-de-deu",
     "nombre": "Hospital Sant Joan de Déu",
     "web": "https://www.sjdhospitalbarcelona.org/es",
-    "logo": null
+    "logo": "/clientes/hospital-sant-joan-de-deu.jpeg"
   },
   {
     "id": "seghnp",
     "nombre": "SEGHNP",
     "web": "https://www.seghnp.org/",
-    "logo": null
+    "logo": "/clientes/seghnp.png"
   },
   {
     "id": "seor",
     "nombre": "SEOR",
     "web": "https://seor.es/",
-    "logo": null
+    "logo": "/clientes/seor.png"
   }
 ]
