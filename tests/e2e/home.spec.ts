@@ -17,11 +17,15 @@ test('las cifras llevan su valor en el HTML (sin depender de JS)', async ({ page
   for (const v of ['183', '+25', '2.266', '104']) expect(html).toContain(`>${v}<`);
 });
 
-test('sin logos, el marquee muestra el nombre en texto y no desborda', async ({ page }) => {
+test('cada cliente del marquee tiene logo con alt o su nombre en texto, y no desborda', async ({ page }) => {
   await page.goto('/');
-  const first = page.locator('.marquee li span').first();
-  await expect(first).toBeAttached();
-  expect((await first.textContent())!.trim().length).toBeGreaterThan(1);
+  const items = page.locator('.marquee li:not([aria-hidden])');
+  expect(await items.count()).toBeGreaterThan(10);
+  const sinNombre = await items.evaluateAll((lis) => lis.filter((li) => {
+    const img = li.querySelector('img'); const name = li.querySelector('.name');
+    return !((img && img.getAttribute('alt')?.trim()) || name?.textContent?.trim());
+  }).length);
+  expect(sinNombre).toBe(0);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 });
